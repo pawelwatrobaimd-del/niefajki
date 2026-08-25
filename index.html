@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BezPapieroska</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#7c4dff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BezPap.">
+  <link rel="apple-touch-icon" href="icon.svg">
+
+  <style>
+    :root {
+      --bg:        #0a0a14;
+      --card:      #13132a;
+      --card2:     #1c1c3a;
+      --border:    rgba(255,255,255,0.07);
+      --primary:   #7c4dff;
+      --pri-light: #a47fff;
+      --cyan:      #00e5ff;
+      --green:     #69f0ae;
+      --yellow:    #ffd740;
+      --red:       #ff5252;
+      --orange:    #ffab40;
+      --text:      #e8e8f0;
+      --muted:     #6e6e8a;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { height: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100%;
+      overflow-x: hidden;
+      padding-bottom: calc(72px + env(safe-area-inset-bottom));
+    }
+
+    /* ── SETUP SCREEN ─────────────────────────────────────────────────────── */
+    #setup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 28px;
+      text-align: center;
+      background: radial-gradient(ellipse at top, rgba(124,77,255,.18) 0%, transparent 65%);
+    }
+
+    .setup-icon { font-size: 5rem; margin-bottom: 20px; line-height: 1; }
+    .setup-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
+    .setup-sub {
+      color: var(--muted); margin-top: 10px; margin-bottom: 40px;
+      line-height: 1.6; font-size: 1rem;
+    }
+
+    .setup-form { width: 100%; max-width: 380px; text-align: left; }
+
+    .form-label {
+      display: block; font-size: 0.75rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
+    }
+
+    .form-input {
+      display: block; width: 100%;
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 14px; color: var(--text);
+      padding: 14px 16px; font-size: 1rem;
+      outline: none; margin-bottom: 20px;
+      transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+    .form-input:focus { border-color: var(--primary); }
+
+    .btn-primary {
+      display: block; width: 100%;
+      padding: 16px; border-radius: 16px; border: none;
+      background: linear-gradient(135deg, var(--primary), var(--pri-light));
+      color: #fff; font-size: 1.05rem; font-weight: 700;
+      cursor: pointer; letter-spacing: .5px;
+      box-shadow: 0 8px 32px rgba(124,77,255,.35);
+      transition: opacity .2s, transform .1s;
+    }
+    .btn-primary:active { opacity: .88; transform: scale(.98); }
+
+    /* ── MAIN APP ─────────────────────────────────────────────────────────── */
+    #app { display: none; }
+
+    /* ── PAGES ────────────────────────────────────────────────────────────── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── HERO (days counter) ─────────────────────────────────────────────── */
+    .hero {
+      padding: 36px 24px 28px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(124,77,255,.14) 0%, transparent 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% -20%, rgba(124,77,255,.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 3px; margin-bottom: 6px;
+    }
+
+    .hero-days {
+      font-size: clamp(5rem, 22vw, 8rem);
+      font-weight: 900; line-height: 1;
+      background: linear-gradient(135deg, var(--pri-light), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(124,77,255,.5));
+    }
+
+    .hero-unit {
+      font-size: 1.3rem; color: var(--muted); margin-top: 6px;
+    }
+
+    .hero-since {
+      font-size: .82rem; color: var(--muted); margin-top: 10px;
+    }
+
+    .streak-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,215,64,.1); border: 1px solid rgba(255,215,64,.35);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: .78rem; color: var(--yellow);
+      margin-top: 14px;
+    }
+
+    /* ── STATS ROW ───────────────────────────────────────────────────────── */
+    .stats-row {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px; padding: 0 16px 16px;
+    }
+
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px 10px; text-align: center;
+    }
+
+    .stat-value { font-size: 1.55rem; font-weight: 800; }
+    .stat-lbl {
+      font-size: .65rem; color: var(--muted); margin-top: 4px;
+      text-transform: uppercase; letter-spacing: .8px; line-height: 1.3;
+    }
+
+    /* ── MOTIVATION ──────────────────────────────────────────────────────── */
+    .motivation {
+      margin: 0 16px 16px;
+      background: linear-gradient(135deg, rgba(124,77,255,.12), rgba(0,229,255,.06));
+      border: 1px solid rgba(124,77,255,.25);
+      border-radius: 20px; padding: 20px;
+      text-align: center;
+    }
+    .motivation-emoji { font-size: 2rem; margin-bottom: 8px; }
+    .motivation-text { font-size: .95rem; line-height: 1.6; }
+
+    /* ── SECTION TITLE ───────────────────────────────────────────────────── */
+    .section { padding: 0 16px 16px; }
+
+    .sec-title {
+      font-size: .7rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sec-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── CARD ────────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 20px;
+    }
+
+    /* ── CHART ───────────────────────────────────────────────────────────── */
+    .chart-legend {
+      display: flex; gap: 16px; margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: .75rem; color: var(--muted);
+    }
+    .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+    .chart-scroll { overflow-x: auto; padding-bottom: 4px; }
+    #chart { display: block; }
+
+    /* ── TODAY PAGE ──────────────────────────────────────────────────────── */
+    .page-header { padding: 24px 20px 4px; }
+    .page-header h2 { font-size: 1.4rem; font-weight: 800; }
+    .page-header .sub { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+
+    /* Toggle row */
+    .toggle-row {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 22px;
+    }
+    .toggle-label {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .toggle-emoji { font-size: 1.6rem; }
+    .toggle-name { font-size: .98rem; font-weight: 600; }
+    .toggle-sub { font-size: .75rem; color: var(--muted); margin-top: 2px; }
+
+    .toggle-switch {
+      width: 54px; height: 30px;
+      background: var(--card2); border: 2px solid var(--border);
+      border-radius: 15px; cursor: pointer; position: relative;
+      transition: background .25s, border-color .25s; flex-shrink: 0;
+    }
+    .toggle-switch.on { background: var(--green); border-color: var(--green); }
+    .toggle-switch::after {
+      content: ''; position: absolute;
+      width: 22px; height: 22px;
+      background: #fff; border-radius: 50%;
+      top: 2px; left: 2px;
+      transition: left .25s;
+      box-shadow: 0 2px 6px rgba(0,0,0,.4);
+    }
+    .toggle-switch.on::after { left: 28px; }
+
+    /* Alcohol stepper */
+    .alc-row { margin-bottom: 24px; }
+    .alc-label {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .alc-controls {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .stepper-btn {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 2px solid var(--primary); background: transparent;
+      color: var(--primary); font-size: 1.6rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s; user-select: none;
+      line-height: 1;
+    }
+    .stepper-btn:active { background: var(--primary); color: #fff; }
+
+    .alc-val {
+      font-size: 2.2rem; font-weight: 800; color: var(--yellow);
+      min-width: 64px; text-align: center;
+    }
+    .alc-unit { font-size: .75rem; color: var(--muted); text-align: center; margin-top: 2px; }
+
+    /* Save button */
+    .save-btn {
+      display: block; width: 100%;
+      padding: 15px; border-radius: 14px; border: none;
+      background: linear-gradient(135deg, var(--primary), var(--pri-light));
+      color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      box-shadow: 0 6px 24px rgba(124,77,255,.3);
+    }
+    .save-btn:active { opacity: .88; transform: scale(.98); }
+    .save-btn.saved {
+      background: linear-gradient(135deg, var(--green), #2eff9a);
+      color: #062812;
+      box-shadow: 0 6px 24px rgba(105,240,174,.25);
+    }
+
+    /* Recent entries */
+    .entry-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .entry-date { font-size: .85rem; color: var(--muted); }
+    .entry-badges { display: flex; gap: 12px; align-items: center; }
+    .entry-badge {
+      font-size: .8rem; display: flex; align-items: center; gap: 4px;
+    }
+
+    /* ── SETTINGS PAGE ───────────────────────────────────────────────────── */
+    .settings-group {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 18px; margin-bottom: 12px;
+    }
+    .settings-lbl {
+      font-size: .7rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;
+    }
+    .settings-input {
+      display: block; width: 100%;
+      background: var(--card2); border: 1.5px solid var(--border);
+      border-radius: 12px; color: var(--text);
+      padding: 12px 14px; font-size: .98rem;
+      outline: none; transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+    .settings-input:focus { border-color: var(--primary); }
+    .settings-desc { font-size: .75rem; color: var(--muted); margin-top: 8px; }
+
+    .btn-danger {
+      display: block; width: 100%;
+      padding: 15px; border-radius: 14px;
+      border: 2px solid var(--red); background: transparent;
+      color: var(--red); font-size: 1rem; font-weight: 600;
+      cursor: pointer; margin-top: 20px; transition: background .2s, color .2s;
+    }
+    .btn-danger:hover { background: rgba(255,82,82,.1); }
+
+    /* ── BOTTOM NAV ──────────────────────────────────────────────────────── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(13,13,26,.92);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-around;
+      padding: 8px 0;
+      padding-bottom: max(8px, env(safe-area-inset-bottom));
+      z-index: 200;
+    }
+
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 4px; padding: 8px 24px; cursor: pointer;
+      opacity: .45; transition: opacity .2s;
+    }
+    .nav-item.active { opacity: 1; }
+    .nav-icon { font-size: 1.45rem; }
+    .nav-label {
+      font-size: .6rem; text-transform: uppercase; letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* ── INSTALL HINT ────────────────────────────────────────────────────── */
+    #install-hint {
+      display: none;
+      position: fixed; top: 12px; left: 12px; right: 12px;
+      background: var(--card2); border: 1px solid rgba(124,77,255,.4);
+      border-radius: 14px; padding: 14px 16px;
+      z-index: 300; font-size: .85rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5);
+    }
+    #install-hint .close-hint {
+      float: right; background: none; border: none;
+      color: var(--muted); cursor: pointer; font-size: 1.2rem; line-height: 1;
+    }
+    #install-btn {
+      display: inline-block; margin-top: 10px;
+      padding: 8px 16px; border-radius: 10px; border: none;
+      background: var(--primary); color: #fff; font-size: .85rem;
+      font-weight: 600; cursor: pointer;
+    }
+
+    /* ── UTILITIES ───────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center; color: var(--muted);
+      padding: 28px; font-size: .9rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ SETUP SCREEN ══ -->
+<div id="setup">
+  <div class="setup-icon">🚭</div>
+  <h1 class="setup-title">Rzuć Palenie</h1>
+  <p class="setup-sub">Twój osobisty asystent.<br>Zacznij śledzić swój postęp już dziś.</p>
+
+  <div class="setup-form">
+    <label class="form-label">Kiedy rzuciłeś/aś palenie?</label>
+    <input type="date" class="form-input" id="s-quit-date">
+
+    <label class="form-label">Ile papierosów dziennie?</label>
+    <input type="number" class="form-input" id="s-cigs" placeholder="np. 20" min="1" max="200">
+
+    <label class="form-label">Cena paczki 20 szt. (zł)</label>
+    <input type="number" class="form-input" id="s-price" placeholder="np. 25" min="1" max="500" step="0.5">
+
+    <button class="btn-primary" onclick="setupStart()">Zaczynamy! 💪</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ MAIN APP ══ -->
+<div id="app">
+
+  <!-- ─── PAGE: HOME ──────────────────────────────────────────────────── -->
+  <div class="page active" id="page-home">
+
+    <div class="hero">
+      <div class="hero-label">Nie palę od</div>
+      <div class="hero-days" id="h-days">0</div>
+      <div class="hero-unit">dni</div>
+      <div class="hero-since" id="h-since"></div>
+      <div id="h-streak"></div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="h-cigs" style="color:var(--green)">0</div>
+        <div class="stat-lbl">Papierosów<br>unikniętych</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="h-money" style="color:var(--cyan)">0</div>
+        <div class="stat-lbl">Zaoszczędzone<br>złote</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="h-workouts" style="color:var(--yellow)">0</div>
+        <div class="stat-lbl">Treningów<br>łącznie</div>
+      </div>
+    </div>
+
+    <div class="motivation" id="h-motivation">
+      <div class="motivation-emoji" id="h-mot-emoji">💪</div>
+      <div class="motivation-text" id="h-mot-text">Tak trzymaj! Każdy dzień bez papierosa to wielki krok.</div>
+    </div>
+
+    <div class="section">
+      <div class="sec-title">Ostatnie 30 dni</div>
+      <div class="card">
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--green)"></div>
+            Trening
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--yellow)"></div>
+            Alkohol (porcje)
+          </div>
+        </div>
+        <div class="chart-scroll">
+          <canvas id="chart" height="170"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── PAGE: TODAY ─────────────────────────────────────────────────── -->
+  <div class="page" id="page-today">
+
+    <div class="page-header">
+      <h2>Dzisiaj</h2>
+      <div class="sub" id="t-date"></div>
+    </div>
+
+    <div class="section" style="padding-top:16px">
+      <div class="sec-title">Zaloguj dzień</div>
+      <div class="card">
+
+        <!-- Workout toggle -->
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="toggle-emoji">💪</span>
+            <div>
+              <div class="toggle-name">Trening</div>
+              <div class="toggle-sub">Czy trenowałeś/aś dziś?</div>
+            </div>
+          </div>
+          <div class="toggle-switch" id="t-workout-sw" onclick="toggleWorkout()"></div>
+        </div>
+
+        <!-- Alcohol stepper -->
+        <div class="alc-row">
+          <div class="alc-label">
+            <span class="toggle-emoji">🍺</span>
+            <div>
+              <div class="toggle-name">Alkohol</div>
+              <div class="toggle-sub">Porcje standardowe (≈10g czystego alkoholu)</div>
+            </div>
+          </div>
+          <div class="alc-controls">
+            <button class="stepper-btn" onclick="changeAlc(-1)" aria-label="Mniej">−</button>
+            <div>
+              <div class="alc-val" id="t-alc-val">0</div>
+              <div class="alc-unit">porcji</div>
+            </div>
+            <button class="stepper-btn" onclick="changeAlc(1)" aria-label="Więcej">+</button>
+          </div>
+        </div>
+
+        <button class="save-btn" id="t-save-btn" onclick="saveToday()">Zapisz dzień</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-title">Ostatnie wpisy</div>
+      <div id="t-history"></div>
+    </div>
+
+  </div>
+
+  <!-- ─── PAGE: SETTINGS ──────────────────────────────────────────────── -->
+  <div class="page" id="page-settings">
+
+    <div class="page-header">
+      <h2>Ustawienia</h2>
+    </div>
+
+    <div class="section" style="padding-top:16px">
+
+      <div class="settings-group">
+        <div class="settings-lbl">Data rzucenia palenia</div>
+        <input type="date" class="settings-input" id="cfg-date">
+        <div class="settings-desc">Od tej daty liczony jest Twój postęp.</div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-lbl">Papierosów dziennie</div>
+        <input type="number" class="settings-input" id="cfg-cigs" min="1" max="200">
+        <div class="settings-desc">Ile papierosów paliłeś/aś przed rzuceniem.</div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-lbl">Cena paczki 20 szt. (zł)</div>
+        <input type="number" class="settings-input" id="cfg-price" min="1" step="0.5">
+        <div class="settings-desc">Używana do wyliczenia oszczędności.</div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-lbl">Wygaszacz / ekran blokady</div>
+        <div class="toggle-row" style="margin-bottom:0">
+          <div class="toggle-label">
+            <span class="toggle-emoji">🔔</span>
+            <div>
+              <div class="toggle-name">Liczba dni na ekranie blokady</div>
+              <div class="toggle-sub">Stałe powiadomienie widoczne bez odblokowywania</div>
+            </div>
+          </div>
+          <div class="toggle-switch" id="cfg-lockscreen-sw" onclick="toggleLockScreen()"></div>
+        </div>
+        <div class="settings-desc" style="margin-top:10px" id="cfg-lockscreen-desc">Wymaga zgody na powiadomienia. Działa na Androidzie (Chrome PWA).</div>
+      </div>
+
+      <button class="btn-primary" onclick="saveSettings()">Zapisz ustawienia</button>
+      <button class="btn-danger" onclick="resetAll()">🗑️ Usuń wszystkie dane</button>
+
+    </div>
+  </div>
+
+  <!-- ─── BOTTOM NAV ───────────────────────────────────────────────────── -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" id="nav-home" onclick="goPage('home')">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Home</div>
+    </div>
+    <div class="nav-item" id="nav-today" onclick="goPage('today')">
+      <div class="nav-icon">📝</div>
+      <div class="nav-label">Dzisiaj</div>
+    </div>
+    <div class="nav-item" id="nav-settings" onclick="goPage('settings')">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">Ustawienia</div>
+    </div>
+  </nav>
+
+</div>
+
+<!-- ─── PWA INSTALL BANNER ──────────────────────────────────────────────── -->
+<div id="install-hint">
+  <button class="close-hint" onclick="document.getElementById('install-hint').style.display='none'">✕</button>
+  <strong>Dodaj do ekranu głównego</strong><br>
+  Zainstaluj aplikację, aby mieć szybki dostęp i powiadomienia badge z liczbą dni.
+  <br><button id="install-btn" onclick="installPWA()">Zainstaluj</button>
+</div>
+
+<script>
+'use strict';
+
+// ════════════════════════════════════════════════════ STATE ═══════════════════
+let S = {
+  quitDate:   null,   // 'YYYY-MM-DD'
+  cigsPerDay: 20,
+  packPrice:  25,
+  log: {}             // { 'YYYY-MM-DD': { workout: bool, alcohol: number } }
+};
+
+// ════════════════════════════════════════════════════ HELPERS ═════════════════
+const $ = id => document.getElementById(id);
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function daysBetween(fromStr) {
+  const a = new Date(fromStr);
+  const b = new Date();
+  a.setHours(0, 0, 0, 0);
+  b.setHours(0, 0, 0, 0);
+  return Math.max(0, Math.floor((b - a) / 86_400_000));
+}
+
+function persist() {
+  localStorage.setItem('bpapp', JSON.stringify(S));
+}
+
+function loadState() {
+  const raw = localStorage.getItem('bpapp');
+  if (raw) { S = JSON.parse(raw); return true; }
+  return false;
+}
+
+// ════════════════════════════════════════════════════ BADGE API ═══════════════
+function updateBadge() {
+  if (!S.quitDate) return;
+  const n = daysBetween(S.quitDate);
+  if ('setAppBadge' in navigator) navigator.setAppBadge(n).catch(() => {});
+}
+
+// ════════════════════════════════════════════════════ MOTIVATIONS ═════════════
+const MOTIVATIONS = [
+  { e: '🌟', t: 'Fantastycznie! Twoje płuca zaczynają odetchnąć pełną piersią.' },
+  { e: '💪', t: 'Jesteś silniejszy/a niż nałóg. Udowadniasz to każdego dnia!' },
+  { e: '🧠', t: 'Twój mózg wraca do normy. Koncentracja i pamięć się poprawiają.' },
+  { e: '❤️', t: 'Twoje serce bije zdrowiej z każdym dniem bez papierosa.' },
+  { e: '💰', t: 'Oszczędzasz mnóstwo kasy! Pomyśl, co możesz za to kupić.' },
+  { e: '🏃', t: 'Masz więcej energii na treningi. Twoje ciało Ci dziękuje!' },
+  { e: '🌱', t: 'Małe kroki, wielkie zmiany. Każdy dzień bez papierosa się liczy!' },
+  { e: '🎯', t: 'Cel w zasięgu. Nie poddawaj się, jesteś na właściwej drodze.' },
+  { e: '🔥', t: 'Jesteś w ogniu! Nałóg nie ma nad Tobą żadnej władzy.' },
+  { e: '✨', t: 'Twoja skóra, oddech i kondycja są coraz lepsze. Tak trzymaj!' },
+];
+
+function getMotivation(days) {
+  if (days === 0) return { e: '🚀', t: 'Dzisiaj zaczyna się Twoja wolność! Pierwszy krok jest najtrudniejszy.' };
+  if (days === 1) return { e: '🌟', t: 'Pierwszy dzień za Tobą! To najtrudniejszy moment w rzucaniu.' };
+  if (days < 3)   return { e: '💪', t: 'Pierwsze doby najcięższe – masz to! Głód nikotynowy słabnie.' };
+  if (days < 7)   return MOTIVATIONS[days % MOTIVATIONS.length];
+  if (days < 14)  return { e: '🔥', t: `${days} dni! Organizm intensywnie się oczyszcza. Znakomita robota!` };
+  if (days < 30)  return { e: '🏆', t: `${days} dni bez papierosa! Jesteś mistrzem samokontroli.` };
+  if (days < 90)  return { e: '💎', t: `${days} dni! Najtrudniejszy etap masz za sobą. Nałóg nie ma szans.` };
+  return { e: '👑', t: `${days} dni! Jesteś absolutną legendą. Inspirujesz innych!` };
+}
+
+// ════════════════════════════════════════════════════ CHART ═══════════════════
+function drawChart() {
+  const canvas = $('chart');
+  const scroll = canvas.parentElement;
+  const DAYS   = 30;
+  const BW     = 22;   // bar width
+  const GAP    = 8;    // gap between bars
+  const PAD_T  = 20;   // top padding (for workout dot)
+  const PAD_B  = 26;   // bottom padding (for labels)
+  const H      = 170;
+  const CHART_H = H - PAD_T - PAD_B;
+
+  const totalW = Math.max(scroll.clientWidth, DAYS * (BW + GAP) + GAP);
+  canvas.width  = totalW;
+  canvas.height = H;
+
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, totalW, H);
+
+  // Collect last N days
+  const days = [];
+  for (let i = DAYS - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    days.push(d.toISOString().slice(0, 10));
+  }
+
+  const maxAlc = Math.max(1, ...days.map(ds => (S.log[ds]?.alcohol || 0)));
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let g = 0; g <= 4; g++) {
+    const y = PAD_T + CHART_H - (g / 4) * CHART_H;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(totalW, y); ctx.stroke();
+  }
+
+  days.forEach((ds, i) => {
+    const x     = GAP + i * (BW + GAP);
+    const entry = S.log[ds] || {};
+    const alc   = entry.alcohol || 0;
+    const workout = !!entry.workout;
+    const logged  = !!S.log[ds];
+    const isQuit  = S.quitDate && ds >= S.quitDate;
+
+    // Bar fill height
+    const barH = alc > 0
+      ? Math.max(6, (alc / maxAlc) * CHART_H)
+      : 0;
+
+    // Placeholder bar
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    roundRect(ctx, x, PAD_T, BW, CHART_H, 4);
+    ctx.fill();
+
+    // Alcohol bar
+    if (alc > 0) {
+      ctx.fillStyle = alc >= 6 ? '#ff5252' : alc >= 3 ? '#ffab40' : '#ffd740';
+      roundRect(ctx, x, PAD_T + CHART_H - barH, BW, barH, [4, 4, 0, 0]);
+      ctx.fill();
+    }
+
+    // Workout dot
+    const dotY  = PAD_T / 2;
+    const dotX  = x + BW / 2;
+    const dotR  = 5;
+    if (workout) {
+      ctx.fillStyle = '#69f0ae';
+      ctx.shadowColor = '#69f0ae'; ctx.shadowBlur = 10;
+      ctx.beginPath(); ctx.arc(dotX, dotY, dotR, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0;
+    } else if (logged && isQuit) {
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.beginPath(); ctx.arc(dotX, dotY, dotR - 1, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // Date label
+    if (i % 5 === 0 || i === DAYS - 1) {
+      const d = new Date(ds);
+      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.font = '10px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${d.getDate()}/${d.getMonth() + 1}`, dotX, H - 6);
+    }
+  });
+
+  // Scroll to the most recent (rightmost) bar
+  requestAnimationFrame(() => { scroll.scrollLeft = scroll.scrollWidth; });
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  const [tl, tr, br, bl] = Array.isArray(r) ? r : [r, r, r, r];
+  ctx.beginPath();
+  ctx.moveTo(x + tl, y);
+  ctx.lineTo(x + w - tr, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + tr);
+  ctx.lineTo(x + w, y + h - br);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - br, y + h);
+  ctx.lineTo(x + bl, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - bl);
+  ctx.lineTo(x, y + tl);
+  ctx.quadraticCurveTo(x, y, x + tl, y);
+  ctx.closePath();
+}
+
+// ════════════════════════════════════════════════════ HOME PAGE ═══════════════
+function renderHome() {
+  if (!S.quitDate) return;
+
+  const days = daysBetween(S.quitDate);
+  $('h-days').textContent = days;
+
+  const qd = new Date(S.quitDate);
+  $('h-since').textContent = `od ${qd.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+
+  // Stats
+  const cigsAvoided = days * S.cigsPerDay;
+  const moneySaved  = ((cigsAvoided / 20) * S.packPrice).toFixed(0);
+  const totalWo     = Object.values(S.log).filter(e => e.workout).length;
+  $('h-cigs').textContent    = cigsAvoided;
+  $('h-money').textContent   = moneySaved;
+  $('h-workouts').textContent = totalWo;
+
+  // Motivation
+  const mot = getMotivation(days);
+  $('h-mot-emoji').textContent = mot.e;
+  $('h-mot-text').textContent  = mot.t;
+
+  // Training streak (consecutive days from today backwards)
+  let streak = 0;
+  const t = new Date();
+  while (true) {
+    const ds = t.toISOString().slice(0, 10);
+    if (S.log[ds]?.workout) { streak++; t.setDate(t.getDate() - 1); }
+    else break;
+  }
+  $('h-streak').innerHTML = streak > 0
+    ? `<div class="streak-badge">🔥 ${streak}-dniowa passa treningowa</div>`
+    : '';
+
+  drawChart();
+}
+
+// ════════════════════════════════════════════════════ TODAY PAGE ══════════════
+let todayWorkout = false;
+let todayAlc     = 0;
+
+function renderToday() {
+  const ds    = todayStr();
+  const entry = S.log[ds] || {};
+  todayWorkout = !!entry.workout;
+  todayAlc     = entry.alcohol || 0;
+
+  const now = new Date();
+  $('t-date').textContent = now.toLocaleDateString('pl-PL', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  });
+
+  const sw = $('t-workout-sw');
+  sw.classList.toggle('on', todayWorkout);
+  $('t-alc-val').textContent = todayAlc;
+
+  const btn = $('t-save-btn');
+  if (S.log[ds]) {
+    btn.textContent = '✓ Zaktualizuj wpis';
+    btn.classList.add('saved');
+  } else {
+    btn.textContent = 'Zapisz dzień';
+    btn.classList.remove('saved');
+  }
+
+  renderHistory();
+}
+
+function toggleWorkout() {
+  todayWorkout = !todayWorkout;
+  $('t-workout-sw').classList.toggle('on', todayWorkout);
+}
+
+function changeAlc(delta) {
+  todayAlc = Math.max(0, todayAlc + delta);
+  $('t-alc-val').textContent = todayAlc;
+}
+
+function saveToday() {
+  const ds = todayStr();
+  S.log[ds] = { workout: todayWorkout, alcohol: todayAlc };
+  persist();
+  updateBadge();
+
+  const btn = $('t-save-btn');
+  btn.textContent = '✓ Zapisano!';
+  btn.classList.add('saved');
+  setTimeout(() => { btn.textContent = '✓ Zaktualizuj wpis'; }, 2000);
+
+  renderHistory();
+}
+
+function renderHistory() {
+  const container = $('t-history');
+  const entries = Object.entries(S.log)
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .slice(0, 7);
+
+  if (!entries.length) {
+    container.innerHTML = '<div class="empty-state">Brak wpisów – zaloguj dzisiejszy dzień!</div>';
+    return;
+  }
+
+  container.innerHTML = entries.map(([ds, e]) => {
+    const d = new Date(ds);
+    const label = d.toLocaleDateString('pl-PL', { weekday: 'short', day: 'numeric', month: 'short' });
+    const wIcon = e.workout ? '<span style="color:var(--green)">💪 Tak</span>' : '<span style="color:var(--muted)">— Nie</span>';
+    const alcColor = e.alcohol === 0 ? 'var(--green)' : e.alcohol >= 6 ? 'var(--red)' : e.alcohol >= 3 ? 'var(--orange)' : 'var(--yellow)';
+    const aIcon = `<span style="color:${alcColor}">🍺 ${e.alcohol}</span>`;
+    return `
+      <div class="entry-card">
+        <div class="entry-date">${label}</div>
+        <div class="entry-badges">
+          <div class="entry-badge">${wIcon}</div>
+          <div class="entry-badge">${aIcon}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════ SETTINGS ════════════════
+function renderSettings() {
+  $('cfg-date').value  = S.quitDate || '';
+  $('cfg-cigs').value  = S.cigsPerDay;
+  $('cfg-price').value = S.packPrice;
+  updateLockScreenUI();
+}
+
+function saveSettings() {
+  const d = $('cfg-date').value;
+  if (!d) { alert('Podaj datę rzucenia palenia.'); return; }
+  S.quitDate   = d;
+  S.cigsPerDay = parseInt($('cfg-cigs').value)   || 20;
+  S.packPrice  = parseFloat($('cfg-price').value) || 25;
+  persist();
+  updateBadge();
+  renderHome();
+  alert('Ustawienia zapisane!');
+}
+
+// ════════════════════════════════════════════════════ LOCK SCREEN NOTIFICATION
+function daysWordPL(n) {
+  if (n === 1) return 'dzień';
+  return 'dni';
+}
+
+function updateLockScreenUI() {
+  const sw = $('cfg-lockscreen-sw');
+  if (!sw) return;
+  const enabled = !!S.lockScreen;
+  sw.classList.toggle('on', enabled);
+  const desc = $('cfg-lockscreen-desc');
+  const perm  = Notification.permission;
+  if (perm === 'denied') {
+    desc.textContent = '⚠️ Powiadomienia są zablokowane w ustawieniach przeglądarki.';
+  } else if (enabled) {
+    desc.textContent = '✓ Włączone – powiadomienie odświeża się przy każdym otwarciu aplikacji.';
+  } else {
+    desc.textContent = 'Wymaga zgody na powiadomienia. Działa na Androidzie (Chrome PWA).';
+  }
+}
+
+async function toggleLockScreen() {
+  if (Notification.permission === 'denied') {
+    alert('Powiadomienia są zablokowane. Odblokuj je w ustawieniach przeglądarki/systemu.');
+    return;
+  }
+
+  if (!S.lockScreen) {
+    // Enable: request permission first
+    const result = await Notification.requestPermission();
+    if (result !== 'granted') {
+      updateLockScreenUI();
+      return;
+    }
+    S.lockScreen = true;
+  } else {
+    S.lockScreen = false;
+    // Close existing notification
+    if ('serviceWorker' in navigator) {
+      const reg = await navigator.serviceWorker.ready;
+      const notes = await reg.getNotifications({ tag: 'days-counter' });
+      notes.forEach(n => n.close());
+    }
+  }
+
+  persist();
+  updateLockScreenUI();
+
+  if (S.lockScreen) postLockScreenNotification();
+}
+
+async function postLockScreenNotification() {
+  if (!S.lockScreen || !S.quitDate) return;
+  if (Notification.permission !== 'granted') return;
+  if (!('serviceWorker' in navigator)) return;
+
+  const days = daysBetween(S.quitDate);
+  const reg  = await navigator.serviceWorker.ready;
+  reg.active?.postMessage({ type: 'LOCK_SCREEN_UPDATE', days });
+}
+
+function resetAll() {
+  if (!confirm('Usunąć wszystkie dane?\nTej operacji nie można cofnąć.')) return;
+  localStorage.removeItem('bpapp');
+  location.reload();
+}
+
+// ════════════════════════════════════════════════════ NAVIGATION ══════════════
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  $('page-' + name).classList.add('active');
+  $('nav-'  + name).classList.add('active');
+  if (name === 'home')     renderHome();
+  if (name === 'today')    renderToday();
+  if (name === 'settings') renderSettings();
+}
+
+// ════════════════════════════════════════════════════ SETUP ═══════════════════
+function setupStart() {
+  const qd   = $('s-quit-date').value;
+  const cigs = parseInt($('s-cigs').value) || 20;
+  const price = parseFloat($('s-price').value) || 25;
+  if (!qd) { alert('Podaj datę rzucenia palenia!'); return; }
+  S.quitDate   = qd;
+  S.cigsPerDay = cigs;
+  S.packPrice  = price;
+  S.log        = {};
+  persist();
+  bootApp();
+}
+
+// ════════════════════════════════════════════════════ BOOT ════════════════════
+function bootApp() {
+  $('setup').style.display = 'none';
+  $('app').style.display   = 'block';
+  renderHome();
+  renderToday();
+  renderSettings();
+  updateBadge();
+  // Refresh lock-screen notification on every app open
+  postLockScreenNotification();
+}
+
+function init() {
+  if (loadState()) {
+    bootApp();
+  } else {
+    $('setup').style.display = 'flex';
+    // Default quit date = today
+    const today = todayStr();
+    $('s-quit-date').value = today;
+    $('s-quit-date').max   = today;
+  }
+}
+
+// ════════════════════════════════════════════════════ PWA / SW ════════════════
+let deferredInstall = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstall = e;
+  // Show install hint after 3s if app is loaded
+  setTimeout(() => {
+    if ($('app').style.display !== 'none') {
+      $('install-hint').style.display = 'block';
+    }
+  }, 3000);
+});
+
+function installPWA() {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(() => {
+    deferredInstall = null;
+    $('install-hint').style.display = 'none';
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  $('install-hint').style.display = 'none';
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(console.error);
+}
+
+// Redraw chart on resize
+window.addEventListener('resize', () => {
+  const home = $('page-home');
+  if (home.classList.contains('active')) drawChart();
+});
+
+// ─── Go! ─────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

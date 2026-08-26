@@ -244,7 +244,7 @@
 
     .toggle-switch {
       width: 54px; height: 30px;
-      background: var(--card2); border: 2px solid var(--border);
+      background: var(--card2); border: 2px solid rgba(255,255,255,0.28);
       border-radius: 15px; cursor: pointer; position: relative;
       transition: background .25s, border-color .25s; flex-shrink: 0;
     }
@@ -268,14 +268,14 @@
       display: flex; align-items: center; gap: 16px;
     }
     .stepper-btn {
-      width: 44px; height: 44px; border-radius: 50%;
-      border: 2px solid var(--primary); background: transparent;
-      color: var(--primary); font-size: 1.6rem; cursor: pointer;
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.07);
+      color: #fff; font-size: 1.6rem; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: background .15s, color .15s; user-select: none;
+      transition: background .15s, border-color .15s; user-select: none;
       line-height: 1;
     }
-    .stepper-btn:active { background: var(--primary); color: #fff; }
+    .stepper-btn:active { background: var(--primary); border-color: var(--primary); }
 
     .alc-val {
       font-size: 2.2rem; font-weight: 800; color: var(--yellow);
@@ -391,6 +391,114 @@
       text-align: center; color: var(--muted);
       padding: 28px; font-size: .9rem;
     }
+
+    /* ── HOME TILES ──────────────────────────────────────────────────── */
+    .home-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; padding: 12px 12px 4px;
+    }
+    .home-tile {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 22px; padding: 18px 10px 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; min-height: 164px;
+    }
+    .tile-lbl {
+      font-size: .6rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
+    }
+    .tile-big {
+      font-size: clamp(2.6rem, 10vw, 4rem);
+      font-weight: 900; line-height: 1;
+    }
+    .tile-unit { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+    .tile-sub  { font-size: .68rem; color: var(--muted); margin-top: 5px; line-height: 1.3; }
+    .tile-goal-text {
+      font-size: .88rem; font-weight: 600; line-height: 1.4;
+      word-break: break-word; padding: 0 4px;
+    }
+    .tile-alc-controls {
+      display: flex; align-items: center; gap: 10px; margin-top: 6px;
+    }
+    .tile-stepper {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.45);
+      background: rgba(255,255,255,.09);
+      color: #fff; font-size: 1.5rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      user-select: none; transition: background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tile-stepper:active { background: var(--primary); border-color: var(--primary); }
+    .tile-alc-val {
+      font-size: 2rem; font-weight: 800; color: var(--yellow);
+      min-width: 44px; text-align: center;
+    }
+    .tile-workout-btn {
+      margin-top: 8px; padding: 6px 14px; border-radius: 18px;
+      border: 1.5px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.06);
+      color: var(--muted); font-size: .75rem; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tile-workout-btn.logged {
+      background: rgba(105,240,174,.15); border-color: var(--green); color: var(--green);
+    }
+
+    /* ── CALENDAR ─────────────────────────────────────────────────────── */
+    .cal-nav {
+      display: flex; align-items: center; gap: 12px; margin-top: 8px; flex-wrap: wrap;
+    }
+    .cal-nav-btn {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text);
+      padding: 6px 16px; cursor: pointer; font-size: 1.1rem;
+    }
+    .cal-nav-btn:active { background: var(--card2); }
+    .cal-grid-header {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      text-align: center; margin-bottom: 6px;
+      font-size: .62rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-day {
+      aspect-ratio: 1; background: var(--card);
+      border: 1px solid var(--border); border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .cal-day.empty  { background: transparent; border-color: transparent; }
+    .cal-day.today  { border-color: var(--primary); border-width: 2px; }
+    .cal-day.has-wo { background: rgba(105,240,174,.12); border-color: rgba(105,240,174,.4); }
+    .cal-day.future { opacity: .35; }
+    .cal-day-num  { font-size: .72rem; font-weight: 600; line-height: 1; }
+    .cal-wo-dot   { width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin-top: 2px; }
+    .cal-alc-b    { font-size: .58rem; margin-top: 1px; border-radius: 3px; padding: 0 3px; font-weight: 700; line-height: 1.4; }
+
+    /* ── MOTTOS ──────────────────────────────────────────────────────── */
+    .motto-add-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .motto-add-row input { flex: 1; }
+    .motto-add-btn {
+      padding: 12px 16px; border-radius: 12px; border: none;
+      background: var(--primary); color: #fff;
+      font-size: .95rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+    }
+    .motto-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 14px 16px; margin-bottom: 8px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .motto-emoji { font-size: 1.4rem; flex-shrink: 0; line-height: 1.3; }
+    .motto-text  { flex: 1; font-size: .88rem; line-height: 1.55; }
+    .motto-del   {
+      background: none; border: none; color: var(--muted);
+      cursor: pointer; font-size: 1.1rem; padding: 0 4px; flex-shrink: 0;
+    }
+    .motto-del:hover { color: var(--red); }
   </style>
 </head>
 <body>
@@ -418,55 +526,53 @@
   <!-- ─── PAGE: HOME ──────────────────────────────────────────────────── -->
   <div class="page active" id="page-home">
 
-    <div class="goal-banner" id="h-goal-banner" style="display:none">
-      <div class="goal-banner-icon">🎯</div>
-      <div class="goal-banner-body">
-        <div class="goal-banner-label">Mój cel</div>
-        <div class="goal-banner-text" id="h-goal-text"></div>
+    <div class="home-grid">
+
+      <!-- Tile 1: Dni -->
+      <div class="home-tile" style="background:linear-gradient(135deg,rgba(124,77,255,.18),rgba(0,229,255,.07));border-color:rgba(124,77,255,.3)">
+        <div class="tile-lbl">Nie palę od</div>
+        <div class="tile-big" id="h-days" style="background:linear-gradient(135deg,var(--pri-light),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">0</div>
+        <div class="tile-unit">dni</div>
+        <div class="tile-sub" id="h-since"></div>
       </div>
+
+      <!-- Tile 2: Cel -->
+      <div class="home-tile" style="background:linear-gradient(135deg,rgba(255,215,64,.1),rgba(255,171,64,.05));border-color:rgba(255,215,64,.28)">
+        <div class="tile-lbl">🎯 Mój cel</div>
+        <div class="tile-goal-text" id="h-goal-text"></div>
+      </div>
+
+      <!-- Tile 3: Treningi -->
+      <div class="home-tile" style="background:linear-gradient(135deg,rgba(105,240,174,.1),rgba(0,229,255,.04));border-color:rgba(105,240,174,.28)">
+        <div class="tile-lbl">Treningi</div>
+        <div class="tile-big" id="h-workouts" style="color:var(--green)">0</div>
+        <div class="tile-unit">łącznie</div>
+        <button class="tile-workout-btn" id="h-workout-btn" onclick="homeToggleWorkout()">💪 Dziś: nie</button>
+        <div class="tile-sub" id="h-streak"></div>
+      </div>
+
+      <!-- Tile 4: Alkohol -->
+      <div class="home-tile" style="background:linear-gradient(135deg,rgba(255,215,64,.08),rgba(255,82,82,.04));border-color:rgba(255,215,64,.22)">
+        <div class="tile-lbl">🍺 Alkohol dziś</div>
+        <div class="tile-alc-controls">
+          <button class="tile-stepper" onclick="homeChangeAlc(-1)" aria-label="Mniej">−</button>
+          <div class="tile-alc-val" id="h-alc-val">0</div>
+          <button class="tile-stepper" onclick="homeChangeAlc(1)" aria-label="Więcej">+</button>
+        </div>
+        <div class="tile-unit">porcji</div>
+        <div class="tile-sub" id="h-alc-sub"></div>
+      </div>
+
     </div>
 
-    <div class="hero">
-      <div class="hero-label">Nie palę od</div>
-      <div class="hero-days" id="h-days">0</div>
-      <div class="hero-unit">dni</div>
-      <div class="hero-since" id="h-since"></div>
-      <div id="h-streak"></div>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-value" id="h-cigs" style="color:var(--green)">0</div>
-        <div class="stat-lbl">Papierosów<br>unikniętych</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="h-money" style="color:var(--cyan)">0</div>
-        <div class="stat-lbl">Zaoszczędzone<br>złote</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="h-workouts" style="color:var(--yellow)">0</div>
-        <div class="stat-lbl">Treningów<br>łącznie</div>
-      </div>
-    </div>
-
-    <div id="h-streak-wrap" style="text-align:center;padding:0 16px 8px"></div>
-
-    <div class="section">
+    <div class="section" style="padding-top:8px">
       <div class="sec-title">Ostatnie 30 dni</div>
       <div class="card">
         <div class="chart-legend">
-          <div class="legend-item">
-            <div class="legend-dot" style="background:var(--green)"></div>
-            Trening
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot" style="background:var(--yellow)"></div>
-            Alkohol (porcje)
-          </div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Trening</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>Alkohol (porcje)</div>
         </div>
-        <div class="chart-scroll">
-          <canvas id="chart" height="170"></canvas>
-        </div>
+        <div class="chart-scroll"><canvas id="chart" height="170"></canvas></div>
       </div>
     </div>
 
@@ -526,6 +632,51 @@
 
   </div>
 
+  <!-- ─── PAGE: HASŁA ─────────────────────────────────────────────────── -->
+  <div class="page" id="page-mottos">
+
+    <div class="page-header">
+      <h2>💬 Hasła</h2>
+      <div class="sub">Motywacja na każdy dzień</div>
+    </div>
+
+    <div class="section" style="padding-top:16px">
+      <div class="motto-add-row">
+        <input type="text" class="settings-input" id="motto-input"
+               placeholder="Dodaj własne hasło…" maxlength="200">
+        <button class="motto-add-btn" onclick="addMotto()">Dodaj</button>
+      </div>
+      <div id="mottos-user-list"></div>
+      <div id="mottos-builtin-list"></div>
+    </div>
+
+  </div>
+
+  <!-- ─── PAGE: KALENDARZ ─────────────────────────────────────────────── -->
+  <div class="page" id="page-cal">
+
+    <div class="page-header">
+      <h2>📅 Kalendarz</h2>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="calPrevMonth()">‹</button>
+        <div id="cal-month-label" style="font-size:1rem;font-weight:700;min-width:160px;text-align:center"></div>
+        <button class="cal-nav-btn" onclick="calNextMonth()">›</button>
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:12px">
+      <div class="chart-legend cal-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Trening</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>Alkohol</div>
+      </div>
+      <div class="cal-grid-header">
+        <span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>So</span><span>Nd</span>
+      </div>
+      <div id="cal-grid" class="cal-grid"></div>
+    </div>
+
+  </div>
+
   <!-- ─── PAGE: SETTINGS ──────────────────────────────────────────────── -->
   <div class="page" id="page-settings">
 
@@ -545,6 +696,12 @@
         <div class="settings-lbl">Papierosów dziennie</div>
         <input type="number" class="settings-input" id="cfg-cigs" min="1" max="200">
         <div class="settings-desc">Ile papierosów paliłeś/aś przed rzuceniem.</div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-lbl">Mój cel bez palenia</div>
+        <input type="text" class="settings-input" id="cfg-goal" placeholder="np. Chcę przebiec półmaraton" maxlength="120">
+        <div class="settings-desc">Wyświetlany w kafelku na stronie głównej i w powiadomieniu.</div>
       </div>
 
       <div class="settings-group">
@@ -779,32 +936,30 @@ function renderHome() {
   $('h-days').textContent = days;
 
   const qd = new Date(S.quitDate);
-  $('h-since').textContent = `od ${qd.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+  $('h-since').textContent = qd.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' });
 
-  // Stats
-  const cigsAvoided = days * S.cigsPerDay;
-  const moneySaved  = ((cigsAvoided / 20) * S.packPrice).toFixed(0);
-  const totalWo     = Object.values(S.log).filter(e => e.workout).length;
-  $('h-cigs').textContent    = cigsAvoided;
-  $('h-money').textContent   = moneySaved;
-  $('h-workouts').textContent = totalWo;
-
-  // Goal banner
-  const goalBanner = $('h-goal-banner');
-  const goalText   = $('h-goal-text');
+  // Goal tile
+  const goalText = $('h-goal-text');
   if (S.goal && S.goal.trim()) {
     goalText.textContent = S.goal.trim();
-    goalBanner.style.display = 'flex';
+    goalText.style.color = 'var(--yellow)';
   } else {
-    goalBanner.style.display = 'none';
+    goalText.textContent = 'Ustaw cel w Ustawieniach →';
+    goalText.style.color = 'var(--muted)';
   }
 
-  // Motivation
-  const mot = getMotivation(days);
-  $('h-mot-emoji').textContent = mot.e;
-  $('h-mot-text').textContent  = mot.t;
+  // Workouts tile
+  const totalWo = Object.values(S.log).filter(e => e.workout).length;
+  $('h-workouts').textContent = totalWo;
 
-  // Training streak (consecutive days from today backwards)
+  const todayDs    = todayStr();
+  const todayEntry = S.log[todayDs] || {};
+  const woToday    = !!todayEntry.workout;
+  const woBtn = $('h-workout-btn');
+  woBtn.textContent = woToday ? '💪 Dziś: tak!' : '💪 Dziś: nie';
+  woBtn.classList.toggle('logged', woToday);
+
+  // Streak
   let streak = 0;
   const t = new Date();
   while (true) {
@@ -812,9 +967,19 @@ function renderHome() {
     if (S.log[ds]?.workout) { streak++; t.setDate(t.getDate() - 1); }
     else break;
   }
-  $('h-streak').innerHTML = streak > 0
-    ? `<div class="streak-badge">🔥 ${streak}-dniowa passa treningowa</div>`
-    : '';
+  $('h-streak').textContent = streak > 1 ? `🔥 ${streak} dni z rzędu` : '';
+
+  // Alcohol tile
+  const alcToday = todayEntry.alcohol || 0;
+  $('h-alc-val').textContent = alcToday;
+  const alcSub = $('h-alc-sub');
+  if (alcToday === 0) {
+    alcSub.textContent = 'Dziś: zero 👍';
+    alcSub.style.color = 'var(--green)';
+  } else {
+    alcSub.textContent = alcToday >= 6 ? '⚠️ Dużo' : alcToday >= 3 ? 'Umiarkowanie' : 'Mało';
+    alcSub.style.color = alcToday >= 6 ? 'var(--red)' : alcToday >= 3 ? 'var(--orange)' : 'var(--yellow)';
+  }
 
   drawChart();
 }
@@ -904,10 +1069,9 @@ function renderHistory() {
 
 // ════════════════════════════════════════════════════ SETTINGS ════════════════
 function renderSettings() {
-  $('cfg-date').value  = S.quitDate || '';
-  $('cfg-cigs').value  = S.cigsPerDay;
-  $('cfg-price').value = S.packPrice;
-  $('cfg-goal').value  = S.goal || '';
+  $('cfg-date').value = S.quitDate || '';
+  $('cfg-cigs').value = S.cigsPerDay;
+  $('cfg-goal').value = S.goal || '';
   updateLockScreenUI();
 }
 
@@ -915,9 +1079,8 @@ function saveSettings() {
   const d = $('cfg-date').value;
   if (!d) { alert('Podaj datę rzucenia palenia.'); return; }
   S.quitDate   = d;
-  S.cigsPerDay = parseInt($('cfg-cigs').value)   || 20;
-  S.packPrice  = parseFloat($('cfg-price').value) || 25;
-  S.goal       = $('cfg-goal').value.trim();
+  S.cigsPerDay = parseInt($('cfg-cigs').value) || 20;
+  S.goal       = ($('cfg-goal').value || '').trim();
   persist();
   updateBadge();
   renderHome();
@@ -992,6 +1155,133 @@ function resetAll() {
   location.reload();
 }
 
+// ═══════════════════════════════════════════════════ HOME TILE ACTIONS ════
+
+function homeToggleWorkout() {
+  const ds = todayStr();
+  if (!S.log[ds]) S.log[ds] = { workout: false, alcohol: 0 };
+  S.log[ds].workout = !S.log[ds].workout;
+  persist();
+  renderHome();
+}
+
+function homeChangeAlc(delta) {
+  const ds = todayStr();
+  if (!S.log[ds]) S.log[ds] = { workout: false, alcohol: 0 };
+  S.log[ds].alcohol = Math.max(0, (S.log[ds].alcohol || 0) + delta);
+  persist();
+  renderHome();
+}
+
+// ═══════════════════════════════════════════════════ MOTTOS PAGE ═════════
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function addMotto() {
+  const input = $('motto-input');
+  const text  = (input.value || '').trim();
+  if (!text) return;
+  if (!S.mottos) S.mottos = [];
+  S.mottos.unshift(text);
+  persist();
+  input.value = '';
+  renderMottosList();
+}
+
+function deleteMotto(i) {
+  if (!S.mottos) return;
+  S.mottos.splice(i, 1);
+  persist();
+  renderMottosList();
+}
+
+function renderMottosList() {
+  const userList = $('mottos-user-list');
+  if (S.mottos && S.mottos.length) {
+    userList.innerHTML =
+      '<div class="sec-title" style="margin-bottom:10px">Moje hasła</div>' +
+      S.mottos.map((m, i) => `
+        <div class="motto-card">
+          <div class="motto-emoji">✏️</div>
+          <div class="motto-text">${escHtml(m)}</div>
+          <button class="motto-del" onclick="deleteMotto(${i})" aria-label="Usuń">✕</button>
+        </div>`).join('');
+  } else {
+    userList.innerHTML = '';
+  }
+
+  $('mottos-builtin-list').innerHTML =
+    '<div class="sec-title" style="margin-bottom:10px">Inspiracje</div>' +
+    MOTIVATIONS.map(m => `
+      <div class="motto-card">
+        <div class="motto-emoji">${m.e}</div>
+        <div class="motto-text">${escHtml(m.t)}</div>
+      </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════ CALENDAR PAGE ═══════
+
+let calYear  = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+function calPrevMonth() {
+  calMonth--;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+
+function calNextMonth() {
+  calMonth++;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const MONTHS = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec',
+                  'Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
+  $('cal-month-label').textContent = `${MONTHS[calMonth]} ${calYear}`;
+
+  const firstDay = new Date(calYear, calMonth, 1);
+  const lastDay  = new Date(calYear, calMonth + 1, 0);
+  const today    = todayStr();
+
+  let startDow = firstDay.getDay(); // 0=Sun
+  startDow = (startDow + 6) % 7;   // Mon=0
+
+  const cells = [];
+  for (let i = 0; i < startDow; i++) cells.push(null);
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const ds = `${calYear}-${String(calMonth + 1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    cells.push({ d, ds });
+  }
+
+  $('cal-grid').innerHTML = cells.map(c => {
+    if (!c) return '<div class="cal-day empty"></div>';
+    const entry     = S.log[c.ds] || {};
+    const isToday   = c.ds === today;
+    const isFuture  = c.ds > today;
+    const hasWo     = !!entry.workout;
+    const alc       = entry.alcohol || 0;
+    const afterQuit = S.quitDate && c.ds >= S.quitDate;
+
+    let cls = 'cal-day';
+    if (isToday)  cls += ' today';
+    if (hasWo)    cls += ' has-wo';
+    if (isFuture) cls += ' future';
+
+    const woDot = hasWo ? '<div class="cal-wo-dot"></div>' : '';
+    const alcB  = (alc > 0 && afterQuit && !isFuture)
+      ? `<div class="cal-alc-b" style="background:${alc>=6?'var(--red)':alc>=3?'var(--orange)':'var(--yellow)'};color:${alc>=6?'#fff':'#000'}">${alc}</div>`
+      : '';
+
+    return `<div class="${cls}"><div class="cal-day-num">${c.d}</div>${woDot}${alcB}</div>`;
+  }).join('');
+}
+
 // ════════════════════════════════════════════════════ NAVIGATION ══════════════
 function goPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1011,6 +1301,7 @@ function setupStart() {
   if (!qd) { alert('Podaj datę rzucenia palenia!'); return; }
   S.quitDate   = qd;
   S.cigsPerDay = cigs;
+  S.goal       = '';
   S.mottos     = [];
   S.log        = {};
   persist();
@@ -1026,8 +1317,6 @@ function bootApp() {
   renderSettings();
   updateBadge();
   postLockScreenNotification();
-  // Refresh motto display every hour
-  setInterval(renderCurrentMotto, 60_000);
 }
 
 function init() {

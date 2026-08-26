@@ -167,51 +167,20 @@
 
     /* ── STATS ROW ───────────────────────────────────────────────────────── */
     .stats-row {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 12px; padding: 0 16px 16px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px; padding: 0 16px 16px;
     }
 
     .stat-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 20px; padding: 18px 12px; text-align: center;
+      border-radius: 18px; padding: 16px 10px; text-align: center;
     }
 
     .stat-value { font-size: 1.55rem; font-weight: 800; }
     .stat-lbl {
-      font-size: .65rem; color: var(--muted); margin-bottom: 12px;
+      font-size: .65rem; color: var(--muted); margin-top: 4px;
       text-transform: uppercase; letter-spacing: .8px; line-height: 1.3;
     }
-    .stat-sub { font-size: .72rem; color: var(--muted); margin-top: 8px; min-height: 1em; }
-
-    .stat-controls {
-      display: flex; align-items: center; justify-content: center;
-      gap: 10px;
-    }
-    .stat-ctrl-btn {
-      width: 48px; height: 48px; border-radius: 50%;
-      border: 2px solid currentColor; background: transparent;
-      font-size: 1.9rem; font-weight: 300; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .12s, color .12s; user-select: none;
-      flex-shrink: 0; line-height: 1; padding: 0;
-    }
-    .stat-ctrl-btn.green { color: var(--green); }
-    .stat-ctrl-btn.green:active { background: var(--green); color: #052010; }
-    .stat-ctrl-btn.yellow { color: var(--yellow); }
-    .stat-ctrl-btn.yellow:active { background: var(--yellow); color: #1a0a00; }
-    .stat-ctrl-val {
-      font-size: 2.3rem; font-weight: 900;
-      min-width: 52px; text-align: center; line-height: 1;
-    }
-
-    .cigs-pill {
-      margin: 0 16px 14px;
-      background: rgba(105,240,174,.07); border: 1px solid rgba(105,240,174,.2);
-      border-radius: 14px; padding: 10px 18px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .cigs-pill-lbl { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-    .cigs-pill-val { font-size: 1.1rem; font-weight: 800; color: var(--green); }
 
     /* ── MOTIVATION ──────────────────────────────────────────────────────── */
     .motivation {
@@ -422,67 +391,6 @@
       text-align: center; color: var(--muted);
       padding: 28px; font-size: .9rem;
     }
-
-    /* ── CALENDAR PAGE ───────────────────────────────────────────────────── */
-    .cal-nav {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 4px; margin-bottom: 14px;
-    }
-    .cal-nav-btn {
-      width: 42px; height: 42px; border-radius: 12px;
-      border: 1px solid var(--border); background: var(--card);
-      color: var(--text); font-size: 1.4rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s;
-    }
-    .cal-nav-btn:active { background: var(--primary); }
-    .cal-month-lbl { font-size: 1.05rem; font-weight: 700; }
-
-    .cal-totals {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 8px; margin-bottom: 14px;
-    }
-    .cal-total-pill {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px 14px; text-align: center;
-    }
-    .cal-total-val { font-size: 1.5rem; font-weight: 800; }
-    .cal-total-lbl {
-      font-size: .62rem; color: var(--muted); margin-top: 3px;
-      text-transform: uppercase; letter-spacing: .8px; line-height: 1.4;
-    }
-
-    .cal-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr);
-      gap: 3px;
-    }
-    .cal-dow {
-      text-align: center; font-size: .58rem; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .4px;
-      padding: 3px 0 6px;
-    }
-    .cal-cell {
-      background: var(--card2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 4px 2px;
-      min-height: 50px;
-      display: flex; flex-direction: column; align-items: center;
-    }
-    .cal-cell.empty { background: transparent; border-color: transparent; }
-    .cal-cell.today { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
-    .cal-cell.future { opacity: .3; }
-    .cal-day-num {
-      font-size: .68rem; color: var(--muted); line-height: 1; margin-bottom: 4px;
-    }
-    .cal-cell.today .cal-day-num { color: var(--primary); font-weight: 800; }
-    .cal-wo-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 5px rgba(105,240,174,.8);
-      margin-bottom: 2px;
-    }
-    .cal-alc-val {
-      font-size: .66rem; font-weight: 700; line-height: 1;
-    }
   </style>
 </head>
 <body>
@@ -499,9 +407,6 @@
 
     <label class="form-label">Ile papierosów dziennie?</label>
     <input type="number" class="form-input" id="s-cigs" placeholder="np. 20" min="1" max="200">
-
-    <label class="form-label">Twój cel bez palenia (opcjonalnie)</label>
-    <input type="text" class="form-input" id="s-goal" placeholder="np. Chcę przebiec półmaraton" maxlength="120">
 
     <button class="btn-primary" onclick="setupStart()">Zaczynamy! 💪</button>
   </div>
@@ -529,36 +434,22 @@
       <div id="h-streak"></div>
     </div>
 
-    <div class="cigs-pill">
-      <span class="cigs-pill-lbl">🚬 Papierosów unikniętych</span>
-      <span class="cigs-pill-val" id="h-cigs">0</span>
-    </div>
-
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-lbl">💪 Treningi łącznie</div>
-        <div class="stat-controls">
-          <button class="stat-ctrl-btn green" onclick="quickWorkout(-1)" aria-label="Usuń trening">−</button>
-          <div class="stat-ctrl-val" id="h-workouts" style="color:var(--green)">0</div>
-          <button class="stat-ctrl-btn green" onclick="quickWorkout(1)" aria-label="Dodaj trening">+</button>
-        </div>
-        <div class="stat-sub" id="h-workout-today"></div>
+        <div class="stat-value" id="h-cigs" style="color:var(--green)">0</div>
+        <div class="stat-lbl">Papierosów<br>unikniętych</div>
       </div>
       <div class="stat-card">
-        <div class="stat-lbl">🍺 Alkohol dziś</div>
-        <div class="stat-controls">
-          <button class="stat-ctrl-btn yellow" onclick="quickAlc(-1)" aria-label="Mniej">−</button>
-          <div class="stat-ctrl-val" id="h-alc-today" style="color:var(--yellow)">0</div>
-          <button class="stat-ctrl-btn yellow" onclick="quickAlc(1)" aria-label="Więcej">+</button>
-        </div>
-        <div class="stat-sub" style="color:var(--muted)">porcji</div>
+        <div class="stat-value" id="h-money" style="color:var(--cyan)">0</div>
+        <div class="stat-lbl">Zaoszczędzone<br>złote</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="h-workouts" style="color:var(--yellow)">0</div>
+        <div class="stat-lbl">Treningów<br>łącznie</div>
       </div>
     </div>
 
-    <div class="motivation" id="h-motivation">
-      <div class="motivation-emoji" id="h-mot-emoji">💪</div>
-      <div class="motivation-text" id="h-mot-text">Tak trzymaj! Każdy dzień bez papierosa to wielki krok.</div>
-    </div>
+    <div id="h-streak-wrap" style="text-align:center;padding:0 16px 8px"></div>
 
     <div class="section">
       <div class="sec-title">Ostatnie 30 dni</div>
@@ -657,12 +548,6 @@
       </div>
 
       <div class="settings-group">
-        <div class="settings-lbl">Mój cel bez palenia</div>
-        <input type="text" class="settings-input" id="cfg-goal" placeholder="np. Chcę przebiec półmaraton" maxlength="120">
-        <div class="settings-desc">Wyświetlany na górze ekranu głównego i w powiadomieniu na ekranie blokady.</div>
-      </div>
-
-      <div class="settings-group">
         <div class="settings-lbl">Wygaszacz / ekran blokady</div>
         <div class="toggle-row" style="margin-bottom:0">
           <div class="toggle-label">
@@ -689,6 +574,10 @@
       <div class="nav-icon">🏠</div>
       <div class="nav-label">Home</div>
     </div>
+    <div class="nav-item" id="nav-mottos" onclick="goPage('mottos')">
+      <div class="nav-icon">💬</div>
+      <div class="nav-label">Hasła</div>
+    </div>
     <div class="nav-item" id="nav-cal" onclick="goPage('cal')">
       <div class="nav-icon">📅</div>
       <div class="nav-label">Kalendarz</div>
@@ -714,11 +603,10 @@
 
 // ════════════════════════════════════════════════════ STATE ═══════════════════
 let S = {
-  quitDate:   null,   // 'YYYY-MM-DD'
+  quitDate:   null,
   cigsPerDay: 20,
-  packPrice:  25,
-  goal:       '',     // user's motivation goal
-  log: {}             // { 'YYYY-MM-DD': { workout: bool, alcohol: number } }
+  mottos:     [],    // string[]
+  log: {}
 };
 
 // ════════════════════════════════════════════════════ HELPERS ═════════════════
@@ -894,15 +782,12 @@ function renderHome() {
   $('h-since').textContent = `od ${qd.toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })}`;
 
   // Stats
-  const cigsAvoided  = days * S.cigsPerDay;
-  const totalWo      = Object.values(S.log).filter(e => e.workout).length;
-  const todayEntry   = S.log[todayStr()] || {};
-  $('h-cigs').textContent      = cigsAvoided;
-  $('h-workouts').textContent  = totalWo;
-  $('h-alc-today').textContent = todayEntry.alcohol || 0;
-  const hwoToday = $('h-workout-today');
-  hwoToday.textContent = todayEntry.workout ? '\u2713 dzi\u015b zrobiony' : '';
-  hwoToday.style.color = todayEntry.workout ? 'var(--green)' : 'var(--muted)';
+  const cigsAvoided = days * S.cigsPerDay;
+  const moneySaved  = ((cigsAvoided / 20) * S.packPrice).toFixed(0);
+  const totalWo     = Object.values(S.log).filter(e => e.workout).length;
+  $('h-cigs').textContent    = cigsAvoided;
+  $('h-money').textContent   = moneySaved;
+  $('h-workouts').textContent = totalWo;
 
   // Goal banner
   const goalBanner = $('h-goal-banner');
@@ -1021,6 +906,7 @@ function renderHistory() {
 function renderSettings() {
   $('cfg-date').value  = S.quitDate || '';
   $('cfg-cigs').value  = S.cigsPerDay;
+  $('cfg-price').value = S.packPrice;
   $('cfg-goal').value  = S.goal || '';
   updateLockScreenUI();
 }
@@ -1029,7 +915,8 @@ function saveSettings() {
   const d = $('cfg-date').value;
   if (!d) { alert('Podaj datę rzucenia palenia.'); return; }
   S.quitDate   = d;
-  S.cigsPerDay = parseInt($('cfg-cigs').value) || 20;
+  S.cigsPerDay = parseInt($('cfg-cigs').value)   || 20;
+  S.packPrice  = parseFloat($('cfg-price').value) || 25;
   S.goal       = $('cfg-goal').value.trim();
   persist();
   updateBadge();
@@ -1112,6 +999,7 @@ function goPage(name) {
   $('page-' + name).classList.add('active');
   $('nav-'  + name).classList.add('active');
   if (name === 'home')     renderHome();
+  if (name === 'mottos')   renderMottosList();
   if (name === 'cal')      renderCalendar();
   if (name === 'settings') renderSettings();
 }
@@ -1123,7 +1011,7 @@ function setupStart() {
   if (!qd) { alert('Podaj datę rzucenia palenia!'); return; }
   S.quitDate   = qd;
   S.cigsPerDay = cigs;
-  S.goal       = ($('s-goal').value || '').trim();
+  S.mottos     = [];
   S.log        = {};
   persist();
   bootApp();
@@ -1133,11 +1021,13 @@ function setupStart() {
 function bootApp() {
   $('setup').style.display = 'none';
   $('app').style.display   = 'block';
+  if (!S.mottos) S.mottos = [];
   renderHome();
   renderSettings();
   updateBadge();
-  // Refresh lock-screen notification on every app open
   postLockScreenNotification();
+  // Refresh motto display every hour
+  setInterval(renderCurrentMotto, 60_000);
 }
 
 function init() {

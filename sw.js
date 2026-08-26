@@ -41,8 +41,12 @@ function daysWord(n) {
 self.addEventListener('message', event => {
   if (event.data?.type === 'LOCK_SCREEN_UPDATE') {
     const days = event.data.days || 0;
+    const goal = event.data.goal ? event.data.goal.trim() : '';
+    const body = goal
+      ? `${days} ${daysWord(days)} bez papierosa 💪\n🎯 Cel: ${goal}`
+      : `${days} ${daysWord(days)} bez papierosa! Tak trzymaj 💪`;
     self.registration.showNotification('🚭 Bez papierosa', {
-      body: `${days} ${daysWord(days)} bez papierosa! Tak trzymaj 💪`,
+      body,
       icon: '/icon.svg',
       badge: '/icon.svg',
       tag: 'days-counter',

@@ -1,7 +1,7 @@
 {
-  "name": "BezPapieroska",
-  "short_name": "BezPap.",
-  "description": "Twój asystent w rzucaniu palenia",
+  "name": "Nawyki",
+  "short_name": "Nawyki",
+  "description": "Śledzenie codziennych nawyków z punktacją",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

@@ -974,7 +974,7 @@ init();
     initializeApp
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
   import {
-    getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
+    getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult,
     onAuthStateChanged, signOut
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
   import {
@@ -1001,7 +1001,20 @@ init();
     let currentUid  = null;
     let saveTimer   = null;
 
-    window.cloudSignIn  = () => signInWithRedirect(auth, provider);
+    // Popup avoids the cross-origin storage relay between this app's domain and authDomain
+    // that browsers increasingly block for the redirect flow; fall back to redirect if needed.
+    window.cloudSignIn = async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        if (err.code === 'auth/popup-blocked' || err.code === 'auth/operation-not-supported-in-this-environment') {
+          signInWithRedirect(auth, provider);
+        } else if (err.code !== 'auth/cancelled-popup-request' && err.code !== 'auth/popup-closed-by-user') {
+          console.error('Sign-in failed', err);
+          alert('Błąd logowania: ' + err.message);
+        }
+      }
+    };
     window.cloudSignOut = () => signOut(auth);
 
     // Debounced so rapid +/- taps don't spam Firestore writes.

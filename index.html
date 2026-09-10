@@ -1030,7 +1030,16 @@ init();
            <div class="account-status">📴 Bez logowania dane są zapisane tylko na tym urządzeniu.</div>`;
     }
 
-    getRedirectResult(auth).catch(err => console.error('Redirect sign-in error', err));
+    getRedirectResult(auth).catch(err => {
+      console.error('Redirect sign-in error', err);
+      const box = document.getElementById('cfg-account');
+      if (box) {
+        box.dataset.cloudReady = '1';
+        box.innerHTML = `<div class="account-title">Konto</div>
+           <button class="btn-primary" onclick="cloudSignIn()">Zaloguj się przez Google</button>
+           <div class="account-status">⚠️ Błąd logowania: ${window.escapeHtml(err.message || String(err))}</div>`;
+      }
+    });
 
     onAuthStateChanged(auth, async (user) => {
       currentUid = user ? user.uid : null;

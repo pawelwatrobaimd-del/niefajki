@@ -80,6 +80,21 @@
     .tile-btn.minus { border-color: var(--muted); color: var(--muted); }
     .tile-btn.minus:active { background: var(--muted); color: #fff; }
 
+    /* ── HOME: DAY SUMMARY TILE ──────────────────────────────────────────── */
+    .summary-wrap { max-width: 480px; margin: 0 auto; padding: 8px 16px 0; }
+    .summary-tile {
+      aspect-ratio: auto; flex-direction: column;
+      padding: 20px 16px; gap: 10px;
+    }
+    .summary-score { font-size: 2.2rem; font-weight: 900; line-height: 1; color: var(--text); }
+    .summary-score.positive { color: var(--green); }
+    .summary-score.negative { color: var(--red); }
+    .summary-image { max-width: 100%; max-height: 140px; border-radius: 16px; object-fit: cover; }
+    .summary-motto {
+      font-size: .88rem; color: var(--text); text-align: center;
+      line-height: 1.5; font-style: italic;
+    }
+
     /* ── SECTION TITLE ───────────────────────────────────────────────────── */
     .section { padding: 0 16px 16px; }
 
@@ -182,6 +197,34 @@
       font-size: 1rem; cursor: pointer;
     }
 
+    /* ── SETTINGS: MOTTOS ─────────────────────────────────────────────────── */
+    .motto-row {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px 10px; margin-bottom: 8px;
+    }
+    .motto-input {
+      flex: 1; min-width: 0; background: transparent; border: none;
+      color: var(--text); font-size: .88rem; outline: none;
+    }
+
+    /* ── SETTINGS: SUMMARY IMAGES ────────────────────────────────────────── */
+    .summary-image-row { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .summary-image-slot {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px 10px;
+    }
+    .summary-image-slot-lbl { flex: 1; font-size: .85rem; }
+    .summary-image-preview {
+      width: 36px; height: 36px; border-radius: 8px; object-fit: cover; flex-shrink: 0;
+    }
+    .btn-file {
+      flex-shrink: 0; padding: 8px 14px; border-radius: 10px;
+      border: 1.5px solid var(--primary); color: var(--primary);
+      font-size: .8rem; font-weight: 600; cursor: pointer;
+    }
+
     .btn-primary {
       display: block; width: 100%;
       padding: 16px; border-radius: 16px; border: none;
@@ -267,6 +310,14 @@
       <div class="sub" id="h-date"></div>
     </div>
 
+    <div class="summary-wrap">
+      <div class="tile summary-tile" id="summary-tile">
+        <div class="summary-score" id="summary-score">0</div>
+        <img class="summary-image" id="summary-image" alt="" style="display:none">
+        <div class="summary-motto" id="summary-motto"></div>
+      </div>
+    </div>
+
     <div class="tiles-grid" id="home-tiles"></div>
 
   </div>
@@ -323,6 +374,48 @@
 
       <div id="cfg-tiles"></div>
       <button class="btn-primary" onclick="addTile()">+ Dodaj kafelek</button>
+
+      <div class="sec-title" style="margin-top:24px">Podsumowanie dnia</div>
+
+      <div class="card" style="margin-bottom:12px">
+        <div class="account-title">Hasła (losowane codziennie)</div>
+        <div id="cfg-mottos"></div>
+        <button class="btn-primary" style="margin-top:8px" onclick="addMotto()">+ Dodaj hasło</button>
+      </div>
+
+      <div class="card" style="margin-bottom:12px">
+        <div class="account-title">Obrazy zależne od wyniku dnia</div>
+        <div class="summary-image-row">
+          <div class="summary-image-slot">
+            <div class="summary-image-slot-lbl">Wynik ujemny</div>
+            <img class="summary-image-preview" id="cfg-img-preview-negative" style="display:none">
+            <label class="btn-file">
+              Wybierz
+              <input type="file" accept="image/*" hidden onchange="onSummaryImagePicked('negative', this)">
+            </label>
+            <button class="tile-del-btn" onclick="removeSummaryImage('negative')" aria-label="Usuń obraz">🗑️</button>
+          </div>
+          <div class="summary-image-slot">
+            <div class="summary-image-slot-lbl">Wynik zerowy</div>
+            <img class="summary-image-preview" id="cfg-img-preview-zero" style="display:none">
+            <label class="btn-file">
+              Wybierz
+              <input type="file" accept="image/*" hidden onchange="onSummaryImagePicked('zero', this)">
+            </label>
+            <button class="tile-del-btn" onclick="removeSummaryImage('zero')" aria-label="Usuń obraz">🗑️</button>
+          </div>
+          <div class="summary-image-slot">
+            <div class="summary-image-slot-lbl">Wynik dodatni</div>
+            <img class="summary-image-preview" id="cfg-img-preview-positive" style="display:none">
+            <label class="btn-file">
+              Wybierz
+              <input type="file" accept="image/*" hidden onchange="onSummaryImagePicked('positive', this)">
+            </label>
+            <button class="tile-del-btn" onclick="removeSummaryImage('positive')" aria-label="Usuń obraz">🗑️</button>
+          </div>
+        </div>
+      </div>
+
       <button class="btn-danger" onclick="resetAll()">🗑️ Usuń wszystkie dane</button>
 
     </div>
@@ -371,7 +464,9 @@ const DEFAULT_TILES = [
 
 let S = {
   tiles: DEFAULT_TILES.map(t => ({ ...t })),
-  log: {}   // { '2026-09-09': { papierosy: 2, trening: 1 } }
+  log: {},          // { '2026-09-09': { papierosy: 2, trening: 1 } }
+  mottos: [],        // string[]
+  summaryImages: {}  // { negative, zero, positive } -> data URL
 };
 
 // ════════════════════════════════════════════════════ HELPERS ═════════════════
@@ -402,6 +497,8 @@ function applyCloudState(remote) {
   if (!remote) return;
   if (Array.isArray(remote.tiles) && remote.tiles.length) S.tiles = remote.tiles;
   if (remote.log && typeof remote.log === 'object') S.log = remote.log;
+  if (Array.isArray(remote.mottos)) S.mottos = remote.mottos;
+  if (remote.summaryImages && typeof remote.summaryImages === 'object') S.summaryImages = remote.summaryImages;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
   renderHome();
   renderSettings();
@@ -416,6 +513,8 @@ function loadState() {
       const parsed = JSON.parse(raw);
       S.tiles = Array.isArray(parsed.tiles) && parsed.tiles.length ? parsed.tiles : S.tiles;
       S.log   = parsed.log && typeof parsed.log === 'object' ? parsed.log : {};
+      S.mottos = Array.isArray(parsed.mottos) ? parsed.mottos : [];
+      S.summaryImages = parsed.summaryImages && typeof parsed.summaryImages === 'object' ? parsed.summaryImages : {};
       return;
     } catch (err) { /* fall through to defaults below */ }
   }
@@ -459,6 +558,44 @@ function renderHome() {
         </div>
       </div>`;
   }).join('');
+
+  renderSummaryTile();
+}
+
+function computeTodayScore() {
+  const entry = S.log[todayStr()] || {};
+  let score = 0;
+  Object.entries(entry).forEach(([tileId, count]) => {
+    const tile = S.tiles.find(t => t.id === tileId);
+    if (tile) score += count * tile.points;
+  });
+  return score;
+}
+
+// Deterministic "random" pick so the motto stays stable all day and changes the next day.
+function getDailyMotto() {
+  if (!S.mottos || !S.mottos.length) return '';
+  const ds = todayStr();
+  let hash = 0;
+  for (let i = 0; i < ds.length; i++) hash = (hash * 31 + ds.charCodeAt(i)) >>> 0;
+  return S.mottos[hash % S.mottos.length];
+}
+
+function renderSummaryTile() {
+  const score = computeTodayScore();
+
+  const scoreEl = $('summary-score');
+  scoreEl.textContent = (score > 0 ? '+' : '') + score;
+  scoreEl.className = 'summary-score' + (score > 0 ? ' positive' : score < 0 ? ' negative' : '');
+
+  const key = score > 0 ? 'positive' : score < 0 ? 'negative' : 'zero';
+  const src = S.summaryImages && S.summaryImages[key];
+  const imgEl = $('summary-image');
+  if (src) { imgEl.src = src; imgEl.style.display = 'block'; }
+  else { imgEl.removeAttribute('src'); imgEl.style.display = 'none'; }
+
+  const motto = getDailyMotto();
+  $('summary-motto').textContent = motto || 'Dodaj hasła w Ustawieniach, aby zobaczyć motto dnia.';
 }
 
 function changeCount(tileId, delta) {
@@ -470,6 +607,7 @@ function changeCount(tileId, delta) {
 
   const el = $('count-' + tileId);
   if (el) el.textContent = next;
+  renderSummaryTile();
 }
 
 // ════════════════════════════════════════════════════ STATS PAGE ══════════════
@@ -643,6 +781,90 @@ function renderSettings() {
         onchange="updateTileField('${t.id}','points',this.value)">
       <button class="tile-del-btn" onclick="removeTile('${t.id}')" aria-label="Usuń kafelek">🗑️</button>
     </div>`).join('');
+
+  renderMottosSettings();
+  renderSummaryImagesSettings();
+}
+
+function renderMottosSettings() {
+  const box = $('cfg-mottos');
+  if (!box) return;
+  box.innerHTML = (S.mottos || []).length
+    ? S.mottos.map((m, i) => `
+      <div class="motto-row">
+        <input class="motto-input" value="${escapeHtml(m)}" oninput="updateMotto(${i}, this.value)">
+        <button class="tile-del-btn" onclick="removeMotto(${i})" aria-label="Usuń hasło">🗑️</button>
+      </div>`).join('')
+    : '<div class="empty-state">Brak haseł — dodaj pierwsze poniżej.</div>';
+}
+
+function addMotto() {
+  if (!S.mottos) S.mottos = [];
+  S.mottos.push('Nowe hasło');
+  persist();
+  renderMottosSettings();
+  renderHome();
+}
+
+function updateMotto(i, value) {
+  S.mottos[i] = value;
+  persist();
+  renderHome();
+}
+
+function removeMotto(i) {
+  S.mottos.splice(i, 1);
+  persist();
+  renderMottosSettings();
+  renderHome();
+}
+
+function renderSummaryImagesSettings() {
+  ['negative', 'zero', 'positive'].forEach(key => {
+    const img = $('cfg-img-preview-' + key);
+    if (!img) return;
+    const src = S.summaryImages && S.summaryImages[key];
+    if (src) { img.src = src; img.style.display = 'block'; }
+    else { img.removeAttribute('src'); img.style.display = 'none'; }
+  });
+}
+
+const MAX_SUMMARY_IMAGE_FILE_SIZE = 8 * 1024 * 1024;
+
+function onSummaryImagePicked(key, input) {
+  const file = input.files && input.files[0];
+  input.value = '';
+  if (!file) return;
+  if (file.size > MAX_SUMMARY_IMAGE_FILE_SIZE) { alert('Plik jest za duży (max 8 MB).'); return; }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 480;
+      let w = img.width, h = img.height;
+      if (w > h && w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      else if (h >= w && h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+      if (!S.summaryImages) S.summaryImages = {};
+      S.summaryImages[key] = canvas.toDataURL('image/jpeg', 0.82);
+      persist();
+      renderSummaryImagesSettings();
+      renderHome();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeSummaryImage(key) {
+  if (S.summaryImages) delete S.summaryImages[key];
+  persist();
+  renderSummaryImagesSettings();
+  renderHome();
 }
 
 function updateTileField(id, field, value) {

@@ -133,6 +133,24 @@
     .stat-tile-sub { font-size: .75rem; color: var(--muted); margin-top: 2px; }
     .stat-tile-score { font-size: 1.1rem; font-weight: 800; flex-shrink: 0; }
 
+    /* ── SETTINGS: ACCOUNT / CLOUD SYNC ─────────────────────────────────── */
+    .account-card { margin-bottom: 12px; }
+    .account-title {
+      font-size: .7rem; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 1.5px; margin-bottom: 10px;
+    }
+    .account-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-top: 4px;
+    }
+    .account-email { font-size: .88rem; font-weight: 600; word-break: break-all; }
+    .account-status { font-size: .75rem; color: var(--muted); margin-top: 10px; }
+    .btn-logout {
+      flex-shrink: 0; padding: 8px 16px; border-radius: 10px;
+      border: 1.5px solid var(--red); background: transparent;
+      color: var(--red); font-size: .8rem; font-weight: 600; cursor: pointer;
+    }
+
     /* ── SETTINGS: TILE ROWS ────────────────────────────────────────────── */
     .settings-tile-row {
       display: flex; align-items: center; gap: 8px;
@@ -301,6 +319,8 @@
 
     <div class="section" style="padding-top:16px">
 
+      <div class="card account-card" id="cfg-account"></div>
+
       <div id="cfg-tiles"></div>
       <button class="btn-primary" onclick="addTile()">+ Dodaj kafelek</button>
       <button class="btn-danger" onclick="resetAll()">🗑️ Usuń wszystkie dane</button>
@@ -369,6 +389,23 @@ function escapeHtml(str) {
 
 function persist() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+  if (typeof window.cloudSave === 'function') window.cloudSave(S);
+}
+
+// Bridge for the Firebase module script: current in-memory state to back up to the cloud.
+function getLocalState() {
+  return S;
+}
+
+// Bridge for the Firebase module script: overwrite local state with the cloud copy (cloud wins).
+function applyCloudState(remote) {
+  if (!remote) return;
+  if (Array.isArray(remote.tiles) && remote.tiles.length) S.tiles = remote.tiles;
+  if (remote.log && typeof remote.log === 'object') S.log = remote.log;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+  renderHome();
+  renderSettings();
+  if ($('page-stats').classList.contains('active')) renderStats();
 }
 
 // Migrates the old single-habit "quit smoking" log into the new tile model.
@@ -590,6 +627,12 @@ function roundRect(ctx, x, y, w, h, r) {
 
 // ════════════════════════════════════════════════════ SETTINGS ════════════════
 function renderSettings() {
+  const accountBox = $('cfg-account');
+  if (accountBox && !accountBox.dataset.cloudReady) {
+    accountBox.innerHTML = `<div class="account-title">Konto</div>
+      <div class="account-status">📴 Synchronizacja z chmurą nieskonfigurowana — dane są zapisane tylko na tym urządzeniu.</div>`;
+  }
+
   $('cfg-tiles').innerHTML = S.tiles.map(t => `
     <div class="settings-tile-row">
       <input class="settings-emoji-input" value="${escapeHtml(t.emoji)}" maxlength="4"
@@ -694,6 +737,93 @@ window.addEventListener('resize', () => {
 
 // ─── Go! ─────────────────────────────────────────────────────────────────────
 init();
+</script>
+
+<!-- ═══════════════════════════════════════════════════ CLOUD SYNC (FIREBASE) ══
+     Setup required before this works — see README/chat instructions:
+     1) Create a free Firebase project at https://console.firebase.google.com
+     2) Enable Authentication → Sign-in method → Google
+     3) Enable Firestore Database
+     4) Add this site's domain under Authentication → Settings → Authorized domains
+     5) Paste your project's config into FIREBASE_CONFIG below
+     6) Set Firestore security rules so each user can only read/write their own doc -->
+<script type="module">
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  import {
+    getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
+    onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc
+  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyCR0k2umep_kDDvoOEdOAq6c3BuLtGqKyg",
+    authDomain: "robienierobie.firebaseapp.com",
+    projectId: "robienierobie",
+    storageBucket: "robienierobie.firebasestorage.app",
+    messagingSenderId: "214750339122",
+    appId: "1:214750339122:web:30e786045b40b03bc95c2b"
+  };
+
+  if (FIREBASE_CONFIG.apiKey === "TODO") {
+    console.warn('Cloud sync not configured — paste your Firebase project config in index.html.');
+  } else {
+    const app      = initializeApp(FIREBASE_CONFIG);
+    const auth     = getAuth(app);
+    const db       = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    let currentUid  = null;
+    let saveTimer   = null;
+
+    window.cloudSignIn  = () => signInWithRedirect(auth, provider);
+    window.cloudSignOut = () => signOut(auth);
+
+    // Debounced so rapid +/- taps don't spam Firestore writes.
+    window.cloudSave = (state) => {
+      if (!currentUid) return;
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        setDoc(doc(db, 'users', currentUid), state)
+          .catch(err => console.error('Cloud save failed', err));
+      }, 600);
+    };
+
+    function renderAccountUI(user) {
+      const box = document.getElementById('cfg-account');
+      if (!box) return;
+      box.dataset.cloudReady = '1';
+      box.innerHTML = user
+        ? `<div class="account-title">Konto</div>
+           <div class="account-row">
+             <span class="account-email">✅ ${window.escapeHtml(user.email || user.displayName || 'Zalogowano')}</span>
+             <button class="btn-logout" onclick="cloudSignOut()">Wyloguj</button>
+           </div>
+           <div class="account-status">☁️ Dane synchronizowane z chmurą na każdym urządzeniu.</div>`
+        : `<div class="account-title">Konto</div>
+           <button class="btn-primary" onclick="cloudSignIn()">Zaloguj się przez Google</button>
+           <div class="account-status">📴 Bez logowania dane są zapisane tylko na tym urządzeniu.</div>`;
+    }
+
+    getRedirectResult(auth).catch(err => console.error('Redirect sign-in error', err));
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUid = user ? user.uid : null;
+      renderAccountUI(user);
+      if (!user) return;
+
+      const ref  = doc(db, 'users', user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        window.applyCloudState(snap.data());
+      } else if (typeof window.getLocalState === 'function') {
+        await setDoc(ref, window.getLocalState());
+      }
+    });
+  }
 </script>
 </body>
 </html>

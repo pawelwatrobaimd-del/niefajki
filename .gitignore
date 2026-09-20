@@ -3,3 +3,7 @@ Thumbs.db
 desktop.ini
 *.log
 .firebase/
+functions/node_modules/
+functions/.env*
+
+fajki notatnik.txt

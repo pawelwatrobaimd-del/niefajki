@@ -148,6 +148,24 @@
     .stat-tile-sub { font-size: .75rem; color: var(--muted); margin-top: 2px; }
     .stat-tile-score { font-size: 1.1rem; font-weight: 800; flex-shrink: 0; }
 
+    /* ── STATS: DAILY BREAKDOWN ─────────────────────────────────────────── */
+    .day-group { padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .day-group:last-child { border-bottom: none; }
+    .day-group-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .day-group-date { font-size: .85rem; font-weight: 700; text-transform: capitalize; }
+    .day-group-score { font-size: .95rem; font-weight: 800; }
+    .day-group-items { display: flex; flex-wrap: wrap; gap: 8px; }
+    .day-item {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 6px 10px; font-size: .8rem;
+    }
+    .day-item-emoji { font-size: 1rem; }
+    .day-item-count { font-weight: 700; color: var(--pri-light); }
+
     /* ── SETTINGS: ACCOUNT / CLOUD SYNC ─────────────────────────────────── */
     .account-card { margin-bottom: 12px; }
     .account-title {
@@ -165,6 +183,28 @@
       border: 1.5px solid var(--red); background: transparent;
       color: var(--red); font-size: .8rem; font-weight: 600; cursor: pointer;
     }
+    .auth-divider {
+      display: flex; align-items: center; gap: 10px;
+      font-size: .72rem; color: var(--muted); margin: 14px 0 10px;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .auth-email-actions { display: flex; gap: 8px; }
+    .auth-email-actions .btn-primary, .auth-email-actions .btn-secondary { flex: 1; }
+    .btn-secondary {
+      padding: 12px; border-radius: 12px; border: 1.5px solid var(--primary);
+      background: transparent; color: var(--pri-light); font-size: .85rem;
+      font-weight: 700; cursor: pointer;
+    }
+    .auth-forgot { text-align: right; margin-top: 8px; }
+    .auth-forgot a { font-size: .72rem; color: var(--muted); }
+    .pro-consent {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: .72rem; color: var(--muted); margin: 12px 0; line-height: 1.4;
+    }
+    .pro-consent input { margin-top: 3px; flex-shrink: 0; }
+    .pro-consent a { color: var(--pri-light); }
 
     /* ── SETTINGS: TILE ROWS ────────────────────────────────────────────── */
     .settings-tile-row {
@@ -358,6 +398,11 @@
       </div>
     </div>
 
+    <div class="section">
+      <div class="sec-title">Szczegóły dzienne</div>
+      <div class="card" id="st-daily-list"></div>
+    </div>
+
   </div>
 
   <!-- ─── PAGE: SETTINGS ──────────────────────────────────────────────── -->
@@ -371,6 +416,7 @@
     <div class="section" style="padding-top:16px">
 
       <div class="card account-card" id="cfg-account"></div>
+      <div class="card" id="cfg-pro" style="display:none"></div>
 
       <div id="cfg-tiles"></div>
       <button class="btn-primary" onclick="addTile()">+ Dodaj kafelek</button>
@@ -696,8 +742,43 @@ function renderStats() {
       </div>`).join('')
     : '<div class="empty-state">Brak wpisów w tym okresie.</div>';
 
+  renderDailyList(dates, tileMap);
   drawStatsChart(dates, dailyScores);
 }
+
+function renderDailyList(dates, tileMap) {
+  const box = $('st-daily-list');
+  if (!box) return;
+
+  const daysWithEntries = dates.filter(ds => S.log[ds] && Object.keys(S.log[ds]).length);
+
+  box.innerHTML = daysWithEntries.length
+    ? [...daysWithEntries].reverse().map(ds => {
+      const entry = S.log[ds];
+      const items = Object.entries(entry)
+        .map(([tileId, count]) => ({ tile: tileMap[tileId], count }))
+        .filter(i => i.tile);
+      const dayScore = items.reduce((sum, i) => sum + i.count * i.tile.points, 0);
+      const label = new Date(ds).toLocaleDateString('pl-PL', { weekday: 'short', day: 'numeric', month: 'short' });
+
+      return `
+        <div class="day-group">
+          <div class="day-group-header">
+            <div class="day-group-date">${escapeHtml(label)}</div>
+            <div class="day-group-score" style="color:${dayScore > 0 ? 'var(--green)' : dayScore < 0 ? 'var(--red)' : 'var(--text)'}">${dayScore > 0 ? '+' : ''}${dayScore}</div>
+          </div>
+          <div class="day-group-items">
+            ${items.map(i => `
+              <div class="day-item">
+                <span class="day-item-emoji">${escapeHtml(i.tile.emoji)}</span>
+                <span class="day-item-count">${i.count}</span>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    }).join('')
+    : '<div class="empty-state">Brak wpisów w tym okresie.</div>';
+}
+
 
 function drawStatsChart(dates, scores) {
   const canvas = $('st-chart');
@@ -975,11 +1056,15 @@ init();
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
   import {
     getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult,
-    onAuthStateChanged, signOut
+    onAuthStateChanged, signOut,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+  import {
+    getFunctions, httpsCallable
+  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-functions.js";
 
   const FIREBASE_CONFIG = {
     apiKey: "AIzaSyCR0k2umep_kDDvoOEdOAq6c3BuLtGqKyg",
@@ -993,12 +1078,14 @@ init();
   if (FIREBASE_CONFIG.apiKey === "TODO") {
     console.warn('Cloud sync not configured — paste your Firebase project config in index.html.');
   } else {
-    const app      = initializeApp(FIREBASE_CONFIG);
-    const auth     = getAuth(app);
-    const db       = getFirestore(app);
-    const provider = new GoogleAuthProvider();
+    const app       = initializeApp(FIREBASE_CONFIG);
+    const auth      = getAuth(app);
+    const db        = getFirestore(app);
+    const functions = getFunctions(app, 'europe-west1');
+    const provider  = new GoogleAuthProvider();
 
     let currentUid  = null;
+    let isPro       = false;
     let saveTimer   = null;
 
     // Popup avoids the cross-origin storage relay between this app's domain and authDomain
@@ -1017,14 +1104,80 @@ init();
     };
     window.cloudSignOut = () => signOut(auth);
 
-    // Debounced so rapid +/- taps don't spam Firestore writes.
+    function emailAuthErrorMessage(err) {
+      switch (err.code) {
+        case 'auth/email-already-in-use': return 'Ten adres e-mail jest już zarejestrowany — zaloguj się zamiast rejestrować.';
+        case 'auth/invalid-email':        return 'Nieprawidłowy adres e-mail.';
+        case 'auth/weak-password':        return 'Hasło musi mieć co najmniej 6 znaków.';
+        case 'auth/missing-password':      return 'Podaj hasło.';
+        case 'auth/invalid-credential':
+        case 'auth/wrong-password':
+        case 'auth/user-not-found':        return 'Nieprawidłowy e-mail lub hasło.';
+        case 'auth/too-many-requests':     return 'Zbyt wiele prób — spróbuj ponownie za chwilę.';
+        default:                           return err.message || String(err);
+      }
+    }
+
+    window.emailSignUp = async () => {
+      const email = document.getElementById('cfg-email-input').value.trim();
+      const password = document.getElementById('cfg-password-input').value;
+      if (!email || !password) { alert('Podaj e-mail i hasło.'); return; }
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        alert(emailAuthErrorMessage(err));
+      }
+    };
+
+    window.emailSignIn = async () => {
+      const email = document.getElementById('cfg-email-input').value.trim();
+      const password = document.getElementById('cfg-password-input').value;
+      if (!email || !password) { alert('Podaj e-mail i hasło.'); return; }
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        alert(emailAuthErrorMessage(err));
+      }
+    };
+
+    window.emailForgotPassword = async () => {
+      const email = document.getElementById('cfg-email-input').value.trim();
+      if (!email) { alert('Podaj najpierw swój adres e-mail w polu powyżej.'); return; }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert('Wysłaliśmy link do zresetowania hasła na ' + email);
+      } catch (err) {
+        alert(emailAuthErrorMessage(err));
+      }
+    };
+
+    // Cloud sync (the actual habit data) is a Pro-only perk — free accounts stay local-only.
     window.cloudSave = (state) => {
-      if (!currentUid) return;
+      if (!currentUid || !isPro) return;
       clearTimeout(saveTimer);
       saveTimer = setTimeout(() => {
-        setDoc(doc(db, 'users', currentUid), state)
+        setDoc(doc(db, 'users', currentUid, 'data', 'state'), state)
           .catch(err => console.error('Cloud save failed', err));
       }, 600);
+    };
+
+    window.startProCheckout = async (consentChecked) => {
+      if (!currentUid) { window.cloudSignIn(); return; }
+      if (!consentChecked) {
+        alert('Zaznacz zgodę, aby kontynuować zakup.');
+        return;
+      }
+      const btn = document.getElementById('cfg-pro-buy-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Otwieram płatność…'; }
+      try {
+        const createCheckoutSession = httpsCallable(functions, 'createCheckoutSession');
+        const { data } = await createCheckoutSession();
+        window.location.href = data.url;
+      } catch (err) {
+        console.error('Checkout failed', err);
+        alert('Nie udało się otworzyć płatności: ' + (err.message || err));
+        if (btn) { btn.disabled = false; btn.textContent = 'Odblokuj Pro — 50 zł jednorazowo'; }
+      }
     };
 
     function renderAccountUI(user) {
@@ -1037,10 +1190,49 @@ init();
              <span class="account-email">✅ ${window.escapeHtml(user.email || user.displayName || 'Zalogowano')}</span>
              <button class="btn-logout" onclick="cloudSignOut()">Wyloguj</button>
            </div>
-           <div class="account-status">☁️ Dane synchronizowane z chmurą na każdym urządzeniu.</div>`
+           <div class="account-status">${isPro
+              ? '☁️ Pro aktywne — dane synchronizowane z chmurą na każdym urządzeniu.'
+              : '📴 Wersja darmowa — dane zapisane tylko na tym urządzeniu.'}</div>`
         : `<div class="account-title">Konto</div>
            <button class="btn-primary" onclick="cloudSignIn()">Zaloguj się przez Google</button>
+           <div class="auth-divider">lub e-mailem</div>
+           <input class="settings-name-input" style="margin-bottom:8px" type="email" id="cfg-email-input" placeholder="E-mail" autocomplete="email">
+           <input class="settings-name-input" style="margin-bottom:8px" type="password" id="cfg-password-input" placeholder="Hasło (min. 6 znaków)" autocomplete="current-password">
+           <div class="auth-email-actions">
+             <button class="btn-primary" onclick="emailSignIn()">Zaloguj</button>
+             <button class="btn-secondary" onclick="emailSignUp()">Zarejestruj</button>
+           </div>
+           <div class="auth-forgot"><a href="#" onclick="emailForgotPassword();return false;">Nie pamiętasz hasła?</a></div>
            <div class="account-status">📴 Bez logowania dane są zapisane tylko na tym urządzeniu.</div>`;
+
+      renderProUI(user);
+    }
+
+    function renderProUI(user) {
+      const box = document.getElementById('cfg-pro');
+      if (!box) return;
+      if (!user) { box.style.display = 'none'; return; }
+      box.style.display = '';
+
+      if (isPro) {
+        box.innerHTML = `<div class="account-title">⭐ Nawyki Pro</div>
+          <div class="account-status">Dziękujemy za wsparcie! Synchronizacja w chmurze jest aktywna.</div>`;
+        return;
+      }
+
+      box.innerHTML = `<div class="account-title">⭐ Nawyki Pro — 50 zł jednorazowo</div>
+        <div class="account-status">Odblokuj synchronizację danych w chmurze między urządzeniami, na zawsze, bez subskrypcji.</div>
+        <label class="pro-consent">
+          <input type="checkbox" id="cfg-pro-consent">
+          Wyrażam zgodę na natychmiastowe udostępnienie treści cyfrowych i przyjmuję do wiadomości utratę prawa
+          odstąpienia od umowy po aktywacji Pro. Zapoznałem/-am się z
+          <a href="terms.html" target="_blank" rel="noopener">regulaminem</a> i
+          <a href="privacy.html" target="_blank" rel="noopener">polityką prywatności</a>.
+        </label>
+        <button class="btn-primary" id="cfg-pro-buy-btn"
+          onclick="startProCheckout(document.getElementById('cfg-pro-consent').checked)">
+          Odblokuj Pro — 50 zł jednorazowo
+        </button>`;
     }
 
     getRedirectResult(auth).catch(err => {
@@ -1054,17 +1246,47 @@ init();
       }
     });
 
+    // Stripe redirects back with ?pro=success — entitlement write from the webhook can lag by a
+    // second or two, so poll briefly instead of trusting a single read.
+    async function refreshEntitlement(uid, attemptsLeft) {
+      const snap = await getDoc(doc(db, 'users', uid));
+      const nowPro = snap.exists() && snap.data().pro === true;
+      if (nowPro || attemptsLeft <= 0) {
+        isPro = nowPro;
+        return nowPro;
+      }
+      await new Promise(r => setTimeout(r, 1500));
+      return refreshEntitlement(uid, attemptsLeft - 1);
+    }
+
     onAuthStateChanged(auth, async (user) => {
       currentUid = user ? user.uid : null;
-      renderAccountUI(user);
-      if (!user) return;
+      if (!user) { isPro = false; renderAccountUI(null); return; }
 
-      const ref  = doc(db, 'users', user.uid);
-      const snap = await getDoc(ref);
-      if (snap.exists()) {
-        window.applyCloudState(snap.data());
+      const entRef  = doc(db, 'users', user.uid);
+      const entSnap = await getDoc(entRef);
+      if (entSnap.exists()) {
+        isPro = entSnap.data().pro === true;
+      } else {
+        isPro = false;
+        await setDoc(entRef, { pro: false, email: user.email || null });
+      }
+
+      const params = new URLSearchParams(location.search);
+      if (params.get('pro') === 'success') {
+        history.replaceState(null, '', location.pathname);
+        await refreshEntitlement(user.uid, 5);
+      }
+
+      renderAccountUI(user);
+
+      if (!isPro) return;
+      const stateRef  = doc(db, 'users', user.uid, 'data', 'state');
+      const stateSnap = await getDoc(stateRef);
+      if (stateSnap.exists()) {
+        window.applyCloudState(stateSnap.data());
       } else if (typeof window.getLocalState === 'function') {
-        await setDoc(ref, window.getLocalState());
+        await setDoc(stateRef, window.getLocalState());
       }
     });
   }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polityka prywatności — Nawyki (niefajki.pl)</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background:#0a0a14; color:#e8e8f0; max-width:720px; margin:0 auto; padding:24px 20px 60px; line-height:1.6; }
+  h1 { font-size:1.4rem; margin-bottom:4px; }
+  h2 { font-size:1.05rem; margin-top:28px; color:#a47fff; }
+  p, li { font-size:.92rem; color:#c8c8d8; }
+  .todo { background:#2a1c1c; border:1px solid #ff5252; border-radius:10px; padding:10px 14px; font-size:.8rem; color:#ffab40; margin:16px 0; }
+  a { color:#00e5ff; }
+</style>
+</head>
+<body>
+  <h1>Polityka prywatności</h1>
+  <p><em>Ostatnia aktualizacja: 12.09.2026</em></p>
+
+  <div class="todo">
+    ⚠️ Szablon roboczy — uzupełnij dane administratora danych przed uruchomieniem produkcyjnym.
+  </div>
+
+  <h2>1. Administrator danych</h2>
+  <p>Administratorem danych jest [NAZWA DZIAŁALNOŚCI], e-mail kontaktowy: [E-MAIL].</p>
+
+  <h2>2. Jakie dane przetwarzamy</h2>
+  <ul>
+    <li><strong>Bez logowania:</strong> aplikacja nie wysyła żadnych danych na serwer — wszystkie
+        wpisy o nawykach są zapisywane wyłącznie lokalnie w przeglądarce (localStorage).</li>
+    <li><strong>Po zalogowaniu przez Google (opcjonalnie):</strong> przetwarzamy adres e-mail
+        i identyfikator konta Google w celu uwierzytelnienia.</li>
+    <li><strong>Po odblokowaniu Pro:</strong> dodatkowo przechowujemy Twoje wpisy o nawykach
+        w bazie danych Firebase (Google Cloud), aby zsynchronizować je między urządzeniami,
+        oraz status płatności (identyfikator transakcji Stripe, data aktywacji).</li>
+  </ul>
+
+  <h2>3. Płatności</h2>
+  <p>Obsługę płatności realizuje Stripe. Nie przechowujemy danych Twojej karty płatniczej —
+     są one przetwarzane bezpośrednio przez Stripe zgodnie z jego
+     <a href="https://stripe.com/privacy" target="_blank" rel="noopener">polityką prywatności</a>.</p>
+
+  <h2>4. Podstawa prawna i cel przetwarzania</h2>
+  <p>Dane przetwarzamy w celu wykonania umowy (art. 6 ust. 1 lit. b RODO) — dostarczenia funkcji
+     synchronizacji, na którą użytkownik zdecydował się dokonując zakupu Pro.</p>
+
+  <h2>5. Okres przechowywania</h2>
+  <p>Dane w chmurze przechowujemy do czasu usunięcia konta przez użytkownika lub zgłoszenia
+     żądania usunięcia na adres [E-MAIL].</p>
+
+  <h2>6. Twoje prawa</h2>
+  <p>Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia oraz przenoszenia.
+     W tym celu skontaktuj się z nami pod adresem [E-MAIL].</p>
+
+  <p style="margin-top:32px"><a href="index.html">← Wróć do aplikacji</a></p>
+</body>
+</html>

@@ -1,10 +1,12 @@
-const CACHE_NAME = 'nawyki-v4';
+const CACHE_NAME = 'nawyki-v6';
 const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/icon.svg',
-  '/icon-maskable.svg'
+  '/icon-maskable.svg',
+  '/terms.html',
+  '/privacy.html'
 ];
 
 self.addEventListener('install', event => {

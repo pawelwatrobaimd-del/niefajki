@@ -19,7 +19,7 @@ const STRIPE_WEBHOOK_SECRET = defineSecret('STRIPE_WEBHOOK_SECRET');
 const PRO_PRICE_PLN_GROSZE = 5000; // 50,00 zł
 // Allowed one-time "tip" amounts — fixed list so the client can never send an arbitrary amount.
 const TIP_AMOUNTS_PLN_GROSZE = [500, 1000, 2000, 5000];
-const SITE_URL = 'https://niefajki.pl';
+const SITE_URL = 'https://robienierobie.web.app';
 
 exports.createCheckoutSession = onCall(
   { secrets: [STRIPE_SECRET_KEY] },
@@ -48,7 +48,7 @@ exports.createCheckoutSession = onCall(
           unit_amount: PRO_PRICE_PLN_GROSZE,
           product_data: {
             name: 'Nawyki Pro — odblokowanie na zawsze',
-            description: 'Synchronizacja w chmurze między urządzeniami dla aplikacji niefajki.pl',
+            description: 'Synchronizacja w chmurze między urządzeniami dla aplikacji Nawyki',
           },
         },
       }],
@@ -79,7 +79,7 @@ exports.createTipCheckoutSession = onCall(
           currency: 'pln',
           unit_amount: amount,
           product_data: {
-            name: 'Napiwek dla niefajki.pl ☕',
+            name: 'Napiwek dla aplikacji Nawyki ☕',
             description: 'Dobrowolne wsparcie rozwoju aplikacji — dziękujemy!',
           },
         },

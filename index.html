@@ -190,6 +190,16 @@
     .auth-divider::before, .auth-divider::after {
       content: ''; flex: 1; height: 1px; background: var(--border);
     }
+    .btn-apple {
+      width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid var(--text);
+      background: #000; color: #fff; font-size: .85rem; font-weight: 700;
+      cursor: pointer; margin-top: 8px;
+    }
+    .btn-facebook {
+      width: 100%; padding: 12px; border-radius: 12px; border: none;
+      background: #1877f2; color: #fff; font-size: .85rem; font-weight: 700;
+      cursor: pointer; margin-top: 8px;
+    }
     .auth-email-actions { display: flex; gap: 8px; }
     .auth-email-actions .btn-primary, .auth-email-actions .btn-secondary { flex: 1; }
     .btn-secondary {
@@ -199,6 +209,17 @@
     }
     .auth-forgot { text-align: right; margin-top: 8px; }
     .auth-forgot a { font-size: .72rem; color: var(--muted); }
+    .tile-add-actions { display: flex; gap: 8px; }
+    .tile-add-actions .btn-primary, .tile-add-actions .btn-secondary { flex: 1; }
+    .sync-code-value {
+      font-family: ui-monospace, monospace; font-size: 1.1rem; font-weight: 700;
+      letter-spacing: 1px; text-align: center; background: var(--card2);
+      border: 1.5px dashed var(--primary); border-radius: 10px; padding: 10px; margin: 8px 0;
+    }
+    .sync-redeem-row { display: flex; gap: 8px; margin-top: 8px; }
+    .sync-redeem-row input { margin-bottom: 0; }
+    .tip-amount-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .tip-amount-row button { flex: 1; min-width: 60px; padding: 10px 6px; }
     .pro-consent {
       display: flex; align-items: flex-start; gap: 8px;
       font-size: .72rem; color: var(--muted); margin: 12px 0; line-height: 1.4;
@@ -217,6 +238,7 @@
       background: var(--card2); border: 1.5px solid var(--border);
       border-radius: 10px; color: var(--text); padding: 10px 4px; font-size: 1.1rem;
       outline: none; transition: border-color .2s; -webkit-appearance: none; appearance: none;
+      cursor: pointer;
     }
     .settings-name-input {
       flex: 1; min-width: 0;
@@ -275,6 +297,7 @@
       transition: opacity .2s, transform .1s;
     }
     .btn-primary:active { opacity: .88; transform: scale(.98); }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
 
     .btn-danger {
       display: block; width: 100%;
@@ -329,6 +352,71 @@
       background: var(--primary); color: #fff; font-size: .85rem;
       font-weight: 600; cursor: pointer;
     }
+
+    /* ── SETTINGS: BACKUP ─────────────────────────────────────────────────── */
+    .backup-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .backup-actions .btn-secondary, .backup-actions .btn-file { flex: 1; text-align: center; margin: 0; }
+
+    /* ── EMOJI PICKER MODAL ──────────────────────────────────────────────── */
+    .emoji-modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 400;
+      background: rgba(5,5,12,.7); backdrop-filter: blur(4px);
+      align-items: flex-end; justify-content: center;
+    }
+    .emoji-modal-overlay.active { display: flex; }
+    .emoji-modal {
+      width: 100%; max-width: 480px; max-height: 72vh;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0; padding: 18px 16px;
+      display: flex; flex-direction: column;
+      box-shadow: 0 -8px 40px rgba(0,0,0,.5);
+    }
+    .emoji-modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .emoji-modal-title { font-size: .95rem; font-weight: 700; }
+    .emoji-modal-close {
+      background: var(--card2); border: none; color: var(--text);
+      width: 32px; height: 32px; border-radius: 10px; font-size: 1rem; cursor: pointer;
+    }
+    .emoji-grid {
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+      overflow-y: auto; padding-bottom: 8px;
+    }
+    .emoji-option {
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 12px; font-size: 1.4rem; aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .15s, border-color .15s;
+    }
+    .emoji-option:active, .emoji-option.selected { background: var(--primary); border-color: var(--primary); }
+    .emoji-modal-custom {
+      display: flex; gap: 8px; margin-top: 12px; flex-shrink: 0;
+    }
+    .emoji-modal-custom input {
+      flex: 1; min-width: 0; text-align: center; font-size: 1.1rem;
+      background: var(--card2); border: 1.5px solid var(--border);
+      border-radius: 10px; color: var(--text); padding: 10px 4px; outline: none;
+    }
+    .emoji-modal-custom button {
+      flex-shrink: 0; padding: 0 18px; border-radius: 10px; border: none;
+      background: var(--primary); color: #fff; font-weight: 700; cursor: pointer;
+    }
+
+    /* ── TILE TEMPLATE PICKER MODAL (reuses emoji-modal shell) ──────────── */
+    .template-list { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+    .template-option {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 10px 12px; cursor: pointer;
+    }
+    .template-option:active { background: var(--primary); border-color: var(--primary); }
+    .template-option .t-emoji { font-size: 1.3rem; flex-shrink: 0; }
+    .template-option .t-name { flex: 1; font-size: .88rem; }
+    .template-option .t-points { font-size: .78rem; font-weight: 700; flex-shrink: 0; }
+    .template-option .t-points.neg { color: var(--red); }
+    .template-option .t-points.pos { color: var(--green); }
 
     /* ── UTILITIES ───────────────────────────────────────────────────────── */
     .empty-state {
@@ -410,7 +498,6 @@
 
     <div class="page-header">
       <h2>Ustawienia</h2>
-      <div class="sub">Punktacja za 1 sztukę używana do statystyk (od -10 do 10)</div>
     </div>
 
     <div class="section" style="padding-top:16px">
@@ -418,8 +505,22 @@
       <div class="card account-card" id="cfg-account"></div>
       <div class="card" id="cfg-pro" style="display:none"></div>
 
+      <div class="card" style="margin-bottom:12px">
+        <div class="account-title">☕ Postaw nam kawę</div>
+        <div class="account-status" style="margin-top:0">Podoba Ci się appka? Możesz dobrowolnie wesprzeć jej rozwój — bez zakładania konta.</div>
+        <div class="tip-amount-row">
+          <button class="btn-secondary" onclick="startTipCheckout(500)">5 zł</button>
+          <button class="btn-secondary" onclick="startTipCheckout(1000)">10 zł</button>
+          <button class="btn-secondary" onclick="startTipCheckout(2000)">20 zł</button>
+          <button class="btn-secondary" onclick="startTipCheckout(5000)">50 zł</button>
+        </div>
+      </div>
+
       <div id="cfg-tiles"></div>
-      <button class="btn-primary" onclick="addTile()">+ Dodaj kafelek</button>
+      <div class="tile-add-actions">
+        <button class="btn-primary" id="btn-add-tile" onclick="addTile()">+ Dodaj kafelek</button>
+        <button class="btn-secondary" onclick="openTileTemplatePicker()">📋 Wybierz z listy</button>
+      </div>
 
       <div class="sec-title" style="margin-top:24px">Podsumowanie dnia</div>
 
@@ -462,6 +563,18 @@
         </div>
       </div>
 
+      <div class="card" style="margin-bottom:12px">
+        <div class="account-title">Kopia zapasowa danych</div>
+        <div class="account-status" style="margin-top:0">Pobierz plik z danymi tej aplikacji, aby przenieść je na inne urządzenie (bez konta w chmurze), lub wczytaj wcześniej pobraną kopię.</div>
+        <div class="backup-actions">
+          <button type="button" class="btn-secondary" id="btn-export" onclick="exportData()">⬇️ Pobierz kopię</button>
+          <label class="btn-file">
+            ⬆️ Wczytaj kopię
+            <input type="file" accept="application/json,.json" hidden onchange="importData(this)">
+          </label>
+        </div>
+      </div>
+
       <button class="btn-danger" onclick="resetAll()">🗑️ Usuń wszystkie dane</button>
 
     </div>
@@ -491,6 +604,32 @@
   <strong>Dodaj do ekranu głównego</strong><br>
   Zainstaluj aplikację, aby mieć szybki dostęp i powiadomienia badge z liczbą dni.
   <br><button id="install-btn" onclick="installPWA()">Zainstaluj</button>
+</div>
+
+<!-- ─── EMOJI PICKER MODAL ───────────────────────────────────────────────── -->
+<div class="emoji-modal-overlay" id="emoji-modal-overlay" onclick="if(event.target===this) closeEmojiPicker()">
+  <div class="emoji-modal">
+    <div class="emoji-modal-header">
+      <div class="emoji-modal-title">Wybierz emotikonę</div>
+      <button type="button" class="emoji-modal-close" onclick="closeEmojiPicker()" aria-label="Zamknij">✕</button>
+    </div>
+    <div class="emoji-grid" id="emoji-grid"></div>
+    <div class="emoji-modal-custom">
+      <input type="text" id="emoji-custom-input" maxlength="4" placeholder="Własna…">
+      <button type="button" onclick="applyCustomEmoji()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TILE TEMPLATE PICKER MODAL ───────────────────────────────────────── -->
+<div class="emoji-modal-overlay" id="template-modal-overlay" onclick="if(event.target===this) closeTileTemplatePicker()">
+  <div class="emoji-modal">
+    <div class="emoji-modal-header">
+      <div class="emoji-modal-title">Wybierz gotowy nawyk</div>
+      <button type="button" class="emoji-modal-close" onclick="closeTileTemplatePicker()" aria-label="Zamknij">✕</button>
+    </div>
+    <div class="template-list" id="template-list"></div>
+  </div>
 </div>
 
 <script>
@@ -854,14 +993,15 @@ function renderSettings() {
 
   $('cfg-tiles').innerHTML = S.tiles.map(t => `
     <div class="settings-tile-row">
-      <input class="settings-emoji-input" value="${escapeHtml(t.emoji)}" maxlength="4"
-        oninput="updateTileField('${t.id}','emoji',this.value)">
+      <button type="button" class="settings-emoji-input" aria-label="Wybierz emotikonę"
+        onclick="openEmojiPicker('${t.id}')">${escapeHtml(t.emoji)}</button>
       <input class="settings-name-input" value="${escapeHtml(t.name)}"
         oninput="updateTileField('${t.id}','name',this.value)">
       <input class="settings-points-input" type="number" min="-10" max="10" value="${t.points}"
         onchange="updateTileField('${t.id}','points',this.value)">
       <button class="tile-del-btn" onclick="removeTile('${t.id}')" aria-label="Usuń kafelek">🗑️</button>
     </div>`).join('');
+
 
   renderMottosSettings();
   renderSummaryImagesSettings();
@@ -961,6 +1101,7 @@ function updateTileField(id, field, value) {
     tile.name = value;
   } else if (field === 'emoji') {
     tile.emoji = value || '⭐';
+    renderSettings();
   }
 
   persist();
@@ -975,12 +1116,149 @@ function addTile() {
   renderHome();
 }
 
+// ════════════════════════════════════════════════════ TILE TEMPLATES ══════════
+// Gotowe propozycje nawyków — czysto opcjonalne; user może je dodać, edytować lub
+// zignorować i tworzyć własne kafelki od zera.
+const HABIT_TEMPLATES = [
+  { name: 'Papierosy',            emoji: '🚬', points: -5 },
+  { name: 'Alkohol',               emoji: '🍺', points: -3 },
+  { name: 'Słodycze',              emoji: '🍫', points: -2 },
+  { name: 'Fast food',             emoji: '🍔', points: -3 },
+  { name: 'Hazard',                emoji: '🎰', points: -5 },
+  { name: 'Scrollowanie telefonu', emoji: '📱', points: -2 },
+  { name: 'Nocne podjadanie',      emoji: '🌙', points: -2 },
+  { name: 'Spóźnienie',            emoji: '⏰', points: -1 },
+  { name: 'Trening',               emoji: '💪', points: 10 },
+  { name: 'Bieganie',              emoji: '🏃', points: 8 },
+  { name: 'Rozciąganie',           emoji: '🧘', points: 3 },
+  { name: 'Spacer',                emoji: '🚶', points: 4 },
+  { name: 'Picie wody',            emoji: '💧', points: 2 },
+  { name: 'Czytanie',              emoji: '📖', points: 5 },
+  { name: 'Nauka',                 emoji: '📚', points: 4 },
+  { name: 'Medytacja',             emoji: '🧘‍♂️', points: 5 },
+  { name: 'Dziennik',              emoji: '✍️', points: 3 },
+  { name: 'Wczesna pobudka',       emoji: '🌅', points: 3 },
+  { name: 'Zdrowy sen (8h)',       emoji: '😴', points: 3 },
+  { name: 'Brak cukru',            emoji: '🚫', points: 4 },
+];
+
+function openTileTemplatePicker() {
+  $('template-list').innerHTML = HABIT_TEMPLATES.map((t, i) => `
+    <div class="template-option" onclick="addTileFromTemplate(${i})">
+      <span class="t-emoji">${t.emoji}</span>
+      <span class="t-name">${escapeHtml(t.name)}</span>
+      <span class="t-points ${t.points > 0 ? 'pos' : t.points < 0 ? 'neg' : ''}">${t.points > 0 ? '+' : ''}${t.points}</span>
+    </div>`).join('');
+  $('template-modal-overlay').classList.add('active');
+}
+
+function closeTileTemplatePicker() {
+  $('template-modal-overlay').classList.remove('active');
+}
+
+function addTileFromTemplate(index) {
+  const t = HABIT_TEMPLATES[index];
+  if (!t) return;
+  const id = 'tile_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  S.tiles.push({ id, name: t.name, emoji: t.emoji, points: t.points });
+  persist();
+  closeTileTemplatePicker();
+  renderSettings();
+  renderHome();
+}
+
 function removeTile(id) {
   if (!confirm('Usunąć ten kafelek?\nHistoria zapisów zostanie zachowana, ale nie będzie już widoczna.')) return;
   S.tiles = S.tiles.filter(t => t.id !== id);
   persist();
   renderSettings();
   renderHome();
+}
+
+// ════════════════════════════════════════════════════ EMOJI PICKER ════════════
+const EMOJI_LIST = [
+  '🚬','🍺','🍷','🍸','🚭','💊','🎰','📱','🍔','🍕','🍟','🍩','🍰','🍫','🥤','☕',
+  '🧘','💪','🏃','🚴','🏋️','🧎','🤸','⚽','🏊','🚶','🛌','😴','📖','📚','✍️','🎨',
+  '🎵','🎧','🧹','🧺','🍳','🥗','🥦','💧','🚿','🪥','🧴','🧠','❤️','🫁','🩺','🚫',
+  '⏰','📅','💰','💸','🛒','🚗','🚭','🙏','🧘‍♂️','🧘‍♀️','🐶','🐱','🌱','🌳','☀️','🌙',
+  '🎯','✅','❌','⭐','🔥','💯','🎉','😊','😤','😡','😢','📵','🖥️','🎮','🛏️','🚬'
+];
+
+let emojiPickerTileId = null;
+
+function openEmojiPicker(tileId) {
+  emojiPickerTileId = tileId;
+  const tile = S.tiles.find(t => t.id === tileId);
+  const grid = $('emoji-grid');
+  grid.innerHTML = EMOJI_LIST.map(e => `
+    <div class="emoji-option${tile && tile.emoji === e ? ' selected' : ''}" onclick="selectEmoji('${e}')">${e}</div>
+  `).join('');
+  $('emoji-custom-input').value = '';
+  $('emoji-modal-overlay').classList.add('active');
+}
+
+function closeEmojiPicker() {
+  $('emoji-modal-overlay').classList.remove('active');
+  emojiPickerTileId = null;
+}
+
+function selectEmoji(emoji) {
+  if (!emojiPickerTileId) return;
+  updateTileField(emojiPickerTileId, 'emoji', emoji);
+  closeEmojiPicker();
+}
+
+function applyCustomEmoji() {
+  const value = $('emoji-custom-input').value.trim();
+  if (!value) return;
+  selectEmoji(value);
+}
+
+// ════════════════════════════════════════════════════ BACKUP (EXPORT/IMPORT) ══
+function exportData() {
+  const payload = { app: 'niefajki', exportedAt: new Date().toISOString(), ...S };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `niefajki-backup-${todayStr()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importData(input) {
+  const file = input.files && input.files[0];
+  input.value = '';
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    let parsed;
+    try {
+      parsed = JSON.parse(e.target.result);
+    } catch (err) {
+      alert('Nie udało się wczytać pliku — upewnij się, że to poprawna kopia danych z tej aplikacji.');
+      return;
+    }
+    if (!parsed || typeof parsed !== 'object') {
+      alert('Nie udało się wczytać pliku — upewnij się, że to poprawna kopia danych z tej aplikacji.');
+      return;
+    }
+    if (!confirm('Wczytanie kopii zastąpi obecne dane na tym urządzeniu. Kontynuować?')) return;
+
+    S.tiles = Array.isArray(parsed.tiles) && parsed.tiles.length ? parsed.tiles : S.tiles;
+    S.log = parsed.log && typeof parsed.log === 'object' ? parsed.log : {};
+    S.mottos = Array.isArray(parsed.mottos) ? parsed.mottos : [];
+    S.summaryImages = parsed.summaryImages && typeof parsed.summaryImages === 'object' ? parsed.summaryImages : {};
+    persist();
+    renderHome();
+    renderSettings();
+    if ($('page-stats').classList.contains('active')) renderStats();
+    alert('Dane zostały wczytane.');
+  };
+  reader.readAsText(file);
 }
 
 function resetAll() {
@@ -1055,8 +1333,8 @@ init();
     initializeApp
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
   import {
-    getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult,
-    onAuthStateChanged, signOut,
+    getAuth, GoogleAuthProvider, OAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult,
+    onAuthStateChanged, signOut, signInAnonymously, signInWithCustomToken,
     createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
   import {
@@ -1083,25 +1361,40 @@ init();
     const db        = getFirestore(app);
     const functions = getFunctions(app, 'europe-west1');
     const provider  = new GoogleAuthProvider();
+    const appleProvider = new OAuthProvider('apple.com');
+    appleProvider.addScope('email');
+    appleProvider.addScope('name');
+    const facebookProvider = new FacebookAuthProvider();
+    facebookProvider.addScope('email');
 
     let currentUid  = null;
     let isPro       = false;
     let saveTimer   = null;
 
+    // Free-tier feature gating (tile limit, export) reads this; keep it in sync with `isPro`.
+    function setIsPro(value) {
+      isPro = value;
+      window.isPro = value;
+      if (typeof window.renderSettings === 'function') window.renderSettings();
+    }
+
     // Popup avoids the cross-origin storage relay between this app's domain and authDomain
     // that browsers increasingly block for the redirect flow; fall back to redirect if needed.
-    window.cloudSignIn = async () => {
+    async function signInWithProvider(authProvider) {
       try {
-        await signInWithPopup(auth, provider);
+        await signInWithPopup(auth, authProvider);
       } catch (err) {
         if (err.code === 'auth/popup-blocked' || err.code === 'auth/operation-not-supported-in-this-environment') {
-          signInWithRedirect(auth, provider);
+          signInWithRedirect(auth, authProvider);
         } else if (err.code !== 'auth/cancelled-popup-request' && err.code !== 'auth/popup-closed-by-user') {
           console.error('Sign-in failed', err);
           alert('Błąd logowania: ' + err.message);
         }
       }
-    };
+    }
+    window.cloudSignIn = () => signInWithProvider(provider);
+    window.cloudSignInApple = () => signInWithProvider(appleProvider);
+    window.cloudSignInFacebook = () => signInWithProvider(facebookProvider);
     window.cloudSignOut = () => signOut(auth);
 
     function emailAuthErrorMessage(err) {
@@ -1148,6 +1441,55 @@ init();
         alert('Wysłaliśmy link do zresetowania hasła na ' + email);
       } catch (err) {
         alert(emailAuthErrorMessage(err));
+      }
+    };
+
+    // Device pairing without any account: mint a bearer code tied to an anonymous uid,
+    // redeemable on another device via a custom token — no email/password/OAuth involved.
+    window.generateSyncCode = async () => {
+      const btn = document.getElementById('cfg-gencode-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Generuję…'; }
+      try {
+        if (!auth.currentUser) await signInAnonymously(auth);
+        const generate = httpsCallable(functions, 'generateSyncCode');
+        const { data } = await generate();
+        const box = document.getElementById('cfg-synccode-result');
+        if (box) {
+          box.style.display = '';
+          box.innerHTML = `<div class="account-status">Zapisz ten kod — to jedyny sposób, by przenieść dane na inne urządzenie. Nie udostępniaj go nikomu:</div>
+            <div class="sync-code-value">${window.escapeHtml(data.code)}</div>
+            <button type="button" class="btn-secondary" onclick="navigator.clipboard.writeText('${data.code}')">📋 Kopiuj kod</button>`;
+        }
+      } catch (err) {
+        console.error('generateSyncCode failed', err);
+        alert('Nie udało się wygenerować kodu: ' + (err.message || err));
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '🔑 Wygeneruj kod (bez konta)'; }
+      }
+    };
+
+    window.redeemSyncCode = async () => {
+      const input = document.getElementById('cfg-redeemcode-input');
+      const code = input ? input.value.trim() : '';
+      if (!code) { alert('Wklej kod.'); return; }
+      try {
+        const redeem = httpsCallable(functions, 'redeemSyncCode');
+        const { data } = await redeem({ code });
+        await signInWithCustomToken(auth, data.token);
+      } catch (err) {
+        console.error('redeemSyncCode failed', err);
+        alert('Nie udało się wczytać kodu: ' + (err.message || err));
+      }
+    };
+
+    window.startTipCheckout = async (amountGrosze) => {
+      try {
+        const createTip = httpsCallable(functions, 'createTipCheckoutSession');
+        const { data } = await createTip({ amountGrosze });
+        window.location.href = data.url;
+      } catch (err) {
+        console.error('Tip checkout failed', err);
+        alert('Nie udało się otworzyć płatności: ' + (err.message || err));
       }
     };
 
@@ -1203,6 +1545,13 @@ init();
              <button class="btn-secondary" onclick="emailSignUp()">Zarejestruj</button>
            </div>
            <div class="auth-forgot"><a href="#" onclick="emailForgotPassword();return false;">Nie pamiętasz hasła?</a></div>
+           <div class="auth-divider">lub bez konta</div>
+           <button class="btn-secondary" id="cfg-gencode-btn" onclick="generateSyncCode()">🔑 Wygeneruj kod (bez konta)</button>
+           <div id="cfg-synccode-result" style="display:none;margin-top:8px"></div>
+           <div class="sync-redeem-row">
+             <input class="settings-name-input" id="cfg-redeemcode-input" placeholder="Mam już kod…">
+             <button class="btn-secondary" onclick="redeemSyncCode()">Wczytaj</button>
+           </div>
            <div class="account-status">📴 Bez logowania dane są zapisane tylko na tym urządzeniu.</div>`;
 
       renderProUI(user);
@@ -1252,7 +1601,7 @@ init();
       const snap = await getDoc(doc(db, 'users', uid));
       const nowPro = snap.exists() && snap.data().pro === true;
       if (nowPro || attemptsLeft <= 0) {
-        isPro = nowPro;
+        setIsPro(nowPro);
         return nowPro;
       }
       await new Promise(r => setTimeout(r, 1500));
@@ -1261,14 +1610,14 @@ init();
 
     onAuthStateChanged(auth, async (user) => {
       currentUid = user ? user.uid : null;
-      if (!user) { isPro = false; renderAccountUI(null); return; }
+      if (!user) { setIsPro(false); renderAccountUI(null); return; }
 
       const entRef  = doc(db, 'users', user.uid);
       const entSnap = await getDoc(entRef);
       if (entSnap.exists()) {
-        isPro = entSnap.data().pro === true;
+        setIsPro(entSnap.data().pro === true);
       } else {
-        isPro = false;
+        setIsPro(false);
         await setDoc(entRef, { pro: false, email: user.email || null });
       }
 

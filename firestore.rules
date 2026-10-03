@@ -17,5 +17,12 @@ service cloud.firestore {
                             && get(/databases/$(database)/documents/users/$(userId)).data.pro == true;
       }
     }
+
+    // Sync codes map a bearer code -> uid for anonymous device pairing. These are a secret
+    // credential, minted and redeemed only by Cloud Functions (Admin SDK bypasses rules) —
+    // never readable or writable directly by clients.
+    match /syncCodes/{code} {
+      allow read, write: if false;
+    }
   }
 }

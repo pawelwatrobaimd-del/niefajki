@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nawyki-v6';
+const CACHE_NAME = 'nawyki-v12';
 const ASSETS = [
   '/',
   '/index.html',

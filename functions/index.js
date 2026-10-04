@@ -41,6 +41,9 @@ exports.createCheckoutSession = onCall(
       mode: 'payment',
       client_reference_id: uid,
       metadata: { uid },
+      payment_intent_data: {
+        statement_descriptor: 'NAWYKI PRO',
+      },
       line_items: [{
         quantity: 1,
         price_data: {
@@ -73,6 +76,9 @@ exports.createTipCheckoutSession = onCall(
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       metadata: { type: 'tip' },
+      payment_intent_data: {
+        statement_descriptor: 'NAWYKI WSPARCIE',
+      },
       line_items: [{
         quantity: 1,
         price_data: {

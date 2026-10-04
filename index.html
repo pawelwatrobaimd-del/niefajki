@@ -434,7 +434,7 @@
   <div class="page active" id="page-home">
 
     <div class="page-header">
-      <h2>robienierobie</h2>
+      <h2 data-i18n="appName">robienierobie</h2>
       <div class="sub" id="h-date"></div>
     </div>
 
@@ -454,31 +454,31 @@
   <div class="page" id="page-stats">
 
     <div class="page-header">
-      <h2>Statystyki</h2>
+      <h2 data-i18n="stats.title">Statystyki</h2>
       <div class="sub" id="st-period-range"></div>
     </div>
 
     <div class="period-tabs">
-      <div class="period-tab active" data-period="week" onclick="setStatsPeriod('week')">Tydzień</div>
-      <div class="period-tab" data-period="month" onclick="setStatsPeriod('month')">Miesiąc</div>
-      <div class="period-tab" data-period="year" onclick="setStatsPeriod('year')">Rok</div>
-      <div class="period-tab" data-period="all" onclick="setStatsPeriod('all')">Wszystko</div>
+      <div class="period-tab active" data-period="week" data-i18n="stats.week" onclick="setStatsPeriod('week')">Tydzień</div>
+      <div class="period-tab" data-period="month" data-i18n="stats.month" onclick="setStatsPeriod('month')">Miesiąc</div>
+      <div class="period-tab" data-period="year" data-i18n="stats.year" onclick="setStatsPeriod('year')">Rok</div>
+      <div class="period-tab" data-period="all" data-i18n="stats.all" onclick="setStatsPeriod('all')">Wszystko</div>
     </div>
 
     <div class="section" style="padding-top:6px">
       <div class="card score-card">
-        <div class="score-lbl">Wynik łączny</div>
+        <div class="score-lbl" data-i18n="stats.totalScore">Wynik łączny</div>
         <div class="score-value" id="st-total-score">0</div>
       </div>
     </div>
 
     <div class="section">
-      <div class="sec-title">Rozbicie na kafelki</div>
+      <div class="sec-title" data-i18n="stats.breakdown">Rozbicie na kafelki</div>
       <div id="st-tile-list"></div>
     </div>
 
     <div class="section">
-      <div class="sec-title">Wynik dzienny</div>
+      <div class="sec-title" data-i18n="stats.dailyScore">Wynik dzienny</div>
       <div class="card">
         <div class="chart-scroll">
           <canvas id="st-chart" height="170"></canvas>
@@ -487,7 +487,7 @@
     </div>
 
     <div class="section">
-      <div class="sec-title">Szczegóły dzienne</div>
+      <div class="sec-title" data-i18n="stats.dailyDetails">Szczegóły dzienne</div>
       <div class="card" id="st-daily-list"></div>
     </div>
 
@@ -497,7 +497,7 @@
   <div class="page" id="page-settings">
 
     <div class="page-header">
-      <h2>Ustawienia</h2>
+      <h2 data-i18n="settings.title">Ustawienia</h2>
     </div>
 
     <div class="section" style="padding-top:16px">
@@ -506,76 +506,80 @@
       <div class="card" id="cfg-pro" style="display:none"></div>
 
       <div class="card" style="margin-bottom:12px">
-        <div class="account-title">☕ Postaw nam kawę</div>
-        <div class="account-status" style="margin-top:0">Podoba Ci się appka? Możesz dobrowolnie wesprzeć jej rozwój — bez zakładania konta.</div>
-        <div class="tip-amount-row">
-          <button class="btn-secondary" onclick="startTipCheckout(500)">5 zł</button>
-          <button class="btn-secondary" onclick="startTipCheckout(1000)">10 zł</button>
-          <button class="btn-secondary" onclick="startTipCheckout(2000)">20 zł</button>
-          <button class="btn-secondary" onclick="startTipCheckout(5000)">50 zł</button>
-        </div>
+        <div class="account-title" data-i18n="settings.language">🌐 Język</div>
+        <select id="cfg-lang-select" class="settings-name-input" onchange="setLanguage(this.value)">
+          <option value="pl">Polski</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
+
+      <div class="card" style="margin-bottom:12px">
+        <div class="account-title" data-i18n="settings.tipTitle">☕ Postaw nam kawę</div>
+        <div class="account-status" style="margin-top:0" data-i18n="settings.tipDesc">Podoba Ci się appka? Możesz dobrowolnie wesprzeć jej rozwój — bez zakładania konta.</div>
+        <div class="tip-amount-row" id="cfg-tip-amounts"></div>
       </div>
 
       <div id="cfg-tiles"></div>
       <div class="tile-add-actions">
-        <button class="btn-primary" id="btn-add-tile" onclick="addTile()">+ Dodaj kafelek</button>
-        <button class="btn-secondary" onclick="openTileTemplatePicker()">📋 Wybierz z listy</button>
+        <button class="btn-primary" id="btn-add-tile" data-i18n="settings.addTile" onclick="addTile()">+ Dodaj kafelek</button>
+        <button class="btn-secondary" data-i18n="settings.pickFromList" onclick="openTileTemplatePicker()">📋 Wybierz z listy</button>
       </div>
 
-      <div class="sec-title" style="margin-top:24px">Podsumowanie dnia</div>
+      <div class="sec-title" style="margin-top:24px" data-i18n="settings.dailySummary">Podsumowanie dnia</div>
 
       <div class="card" style="margin-bottom:12px">
-        <div class="account-title">Hasła (losowane codziennie)</div>
+        <div class="account-title" data-i18n="settings.mottosTitle">Hasła (losowane codziennie)</div>
         <div id="cfg-mottos"></div>
-        <button class="btn-primary" style="margin-top:8px" onclick="addMotto()">+ Dodaj hasło</button>
+        <button class="btn-primary" style="margin-top:8px" data-i18n="settings.addMotto" onclick="addMotto()">+ Dodaj hasło</button>
       </div>
 
       <div class="card" style="margin-bottom:12px">
-        <div class="account-title">Obrazy zależne od wyniku dnia</div>
+        <div class="account-title" data-i18n="settings.imagesTitle">Obrazy zależne od wyniku dnia</div>
         <div class="summary-image-row">
           <div class="summary-image-slot">
-            <div class="summary-image-slot-lbl">Wynik ujemny</div>
+            <div class="summary-image-slot-lbl" data-i18n="settings.imageNegative">Wynik ujemny</div>
             <img class="summary-image-preview" id="cfg-img-preview-negative" style="display:none">
             <label class="btn-file">
-              Wybierz
+              <span data-i18n="settings.choose">Wybierz</span>
               <input type="file" accept="image/*" hidden onchange="onSummaryImagePicked('negative', this)">
             </label>
-            <button class="tile-del-btn" onclick="removeSummaryImage('negative')" aria-label="Usuń obraz">🗑️</button>
+            <button class="tile-del-btn" onclick="removeSummaryImage('negative')" data-i18n-aria="image.remove" aria-label="Usuń obraz">🗑️</button>
           </div>
           <div class="summary-image-slot">
-            <div class="summary-image-slot-lbl">Wynik zerowy</div>
+            <div class="summary-image-slot-lbl" data-i18n="settings.imageZero">Wynik zerowy</div>
             <img class="summary-image-preview" id="cfg-img-preview-zero" style="display:none">
             <label class="btn-file">
-              Wybierz
+              <span data-i18n="settings.choose">Wybierz</span>
               <input type="file" accept="image/*" hidden onchange="onSummaryImagePicked('zero', this)">
             </label>
-            <button class="tile-del-btn" onclick="removeSummaryImage('zero')" aria-label="Usuń obraz">🗑️</button>
+            <button class="tile-del-btn" onclick="removeSummaryImage('zero')" data-i18n-aria="image.remove" aria-label="Usuń obraz">🗑️</button>
           </div>
           <div class="summary-image-slot">
-            <div class="summary-image-slot-lbl">Wynik dodatni</div>
+            <div class="summary-image-slot-lbl" data-i18n="settings.imagePositive">Wynik dodatni</div>
             <img class="summary-image-preview" id="cfg-img-preview-positive" style="display:none">
             <label class="btn-file">
-              Wybierz
+              <span data-i18n="settings.choose">Wybierz</span>
               <input type="file" accept="image/*" hidden onchange="onSummaryImagePicked('positive', this)">
             </label>
-            <button class="tile-del-btn" onclick="removeSummaryImage('positive')" aria-label="Usuń obraz">🗑️</button>
+            <button class="tile-del-btn" onclick="removeSummaryImage('positive')" data-i18n-aria="image.remove" aria-label="Usuń obraz">🗑️</button>
           </div>
         </div>
       </div>
 
       <div class="card" style="margin-bottom:12px">
-        <div class="account-title">Kopia zapasowa danych</div>
-        <div class="account-status" style="margin-top:0">Pobierz plik z danymi tej aplikacji, aby przenieść je na inne urządzenie (bez konta w chmurze), lub wczytaj wcześniej pobraną kopię.</div>
+        <div class="account-title" data-i18n="settings.backupTitle">Kopia zapasowa danych</div>
+        <div class="account-status" style="margin-top:0" data-i18n="settings.backupDesc">Pobierz plik z danymi tej aplikacji, aby przenieść je na inne urządzenie (bez konta w chmurze), lub wczytaj wcześniej pobraną kopię.</div>
         <div class="backup-actions">
-          <button type="button" class="btn-secondary" id="btn-export" onclick="exportData()">⬇️ Pobierz kopię</button>
+          <button type="button" class="btn-secondary" id="btn-export" data-i18n="settings.exportBtn" onclick="exportData()">⬇️ Pobierz kopię</button>
           <label class="btn-file">
-            ⬆️ Wczytaj kopię
+            <span data-i18n="settings.importBtn">⬆️ Wczytaj kopię</span>
             <input type="file" accept="application/json,.json" hidden onchange="importData(this)">
           </label>
         </div>
       </div>
 
-      <button class="btn-danger" onclick="resetAll()">🗑️ Usuń wszystkie dane</button>
+      <button class="btn-danger" data-i18n="settings.deleteAll" onclick="resetAll()">🗑️ Usuń wszystkie dane</button>
 
     </div>
   </div>
@@ -584,15 +588,15 @@
   <nav class="bottom-nav">
     <div class="nav-item active" id="nav-home" onclick="goPage('home')">
       <div class="nav-icon">🏠</div>
-      <div class="nav-label">Główna</div>
+      <div class="nav-label" data-i18n="nav.home">Główna</div>
     </div>
     <div class="nav-item" id="nav-stats" onclick="goPage('stats')">
       <div class="nav-icon">📊</div>
-      <div class="nav-label">Statystyki</div>
+      <div class="nav-label" data-i18n="nav.stats">Statystyki</div>
     </div>
     <div class="nav-item" id="nav-settings" onclick="goPage('settings')">
       <div class="nav-icon">⚙️</div>
-      <div class="nav-label">Ustawienia</div>
+      <div class="nav-label" data-i18n="nav.settings">Ustawienia</div>
     </div>
   </nav>
 
@@ -601,22 +605,22 @@
 <!-- ─── PWA INSTALL BANNER ──────────────────────────────────────────────── -->
 <div id="install-hint">
   <button class="close-hint" onclick="document.getElementById('install-hint').style.display='none'">✕</button>
-  <strong>Dodaj do ekranu głównego</strong><br>
-  Zainstaluj aplikację, aby mieć szybki dostęp i powiadomienia badge z liczbą dni.
-  <br><button id="install-btn" onclick="installPWA()">Zainstaluj</button>
+  <strong data-i18n="install.title">Dodaj do ekranu głównego</strong><br>
+  <span data-i18n="install.desc">Zainstaluj aplikację, aby mieć szybki dostęp i powiadomienia badge z liczbą dni.</span>
+  <br><button id="install-btn" data-i18n="install.button" onclick="installPWA()">Zainstaluj</button>
 </div>
 
 <!-- ─── EMOJI PICKER MODAL ───────────────────────────────────────────────── -->
 <div class="emoji-modal-overlay" id="emoji-modal-overlay" onclick="if(event.target===this) closeEmojiPicker()">
   <div class="emoji-modal">
     <div class="emoji-modal-header">
-      <div class="emoji-modal-title">Wybierz emotikonę</div>
+      <div class="emoji-modal-title" data-i18n="emoji.title">Wybierz emotikonę</div>
       <button type="button" class="emoji-modal-close" onclick="closeEmojiPicker()" aria-label="Zamknij">✕</button>
     </div>
     <div class="emoji-grid" id="emoji-grid"></div>
     <div class="emoji-modal-custom">
-      <input type="text" id="emoji-custom-input" maxlength="4" placeholder="Własna…">
-      <button type="button" onclick="applyCustomEmoji()">OK</button>
+      <input type="text" id="emoji-custom-input" maxlength="4" data-i18n-placeholder="emoji.customPlaceholder" placeholder="Własna…">
+      <button type="button" data-i18n="emoji.ok" onclick="applyCustomEmoji()">OK</button>
     </div>
   </div>
 </div>
@@ -625,7 +629,7 @@
 <div class="emoji-modal-overlay" id="template-modal-overlay" onclick="if(event.target===this) closeTileTemplatePicker()">
   <div class="emoji-modal">
     <div class="emoji-modal-header">
-      <div class="emoji-modal-title">Wybierz gotowy nawyk</div>
+      <div class="emoji-modal-title" data-i18n="template.title">Wybierz gotowy nawyk</div>
       <button type="button" class="emoji-modal-close" onclick="closeTileTemplatePicker()" aria-label="Zamknij">✕</button>
     </div>
     <div class="template-list" id="template-list"></div>
@@ -639,16 +643,375 @@
 const STORAGE_KEY = 'habits_v1';
 const LEGACY_KEY  = 'bpapp';
 
-const DEFAULT_TILES = [
-  { id: 'papierosy',   name: 'Papierosy',           emoji: '🚬', points: -5 },
-  { id: 'alkohol',     name: 'Alkohol',             emoji: '🍺', points: -3 },
-  { id: 'rozciaganie', name: 'Rozciąganie',         emoji: '🧘', points: 3 },
-  { id: 'trening',     name: 'Trening',             emoji: '💪', points: 10 },
-  { id: 'jedzenie',    name: 'Jedzenie na mieście', emoji: '🍔', points: -3 },
-];
+// ════════════════════════════════════════════════════ I18N ════════════════════
+const LANG_KEY = 'lang_v1';
+
+const I18N = {
+  pl: {
+    appName: 'robienierobie',
+    'nav.home': 'Główna', 'nav.stats': 'Statystyki', 'nav.settings': 'Ustawienia',
+    'home.mottoPlaceholder': 'Dodaj hasła w Ustawieniach, aby zobaczyć motto dnia.',
+    'home.less': 'Mniej', 'home.more': 'Więcej',
+    'stats.title': 'Statystyki',
+    'stats.week': 'Tydzień', 'stats.month': 'Miesiąc', 'stats.year': 'Rok', 'stats.all': 'Wszystko',
+    'stats.totalScore': 'Wynik łączny',
+    'stats.breakdown': 'Rozbicie na kafelki',
+    'stats.dailyScore': 'Wynik dzienny',
+    'stats.dailyDetails': 'Szczegóły dzienne',
+    'stats.empty': 'Brak wpisów w tym okresie.',
+    'stats.unitCount': '{count} szt. × {sign}{points}',
+    'settings.title': 'Ustawienia',
+    'settings.account': 'Konto',
+    'settings.cloudNotConfigured': '📴 Synchronizacja z chmurą nieskonfigurowana — dane są zapisane tylko na tym urządzeniu.',
+    'settings.language': '🌐 Język',
+    'settings.tipTitle': '☕ Postaw nam kawę',
+    'settings.tipDesc': 'Podoba Ci się appka? Możesz dobrowolnie wesprzeć jej rozwój — bez zakładania konta.',
+    'settings.addTile': '+ Dodaj kafelek',
+    'settings.pickFromList': '📋 Wybierz z listy',
+    'settings.dailySummary': 'Podsumowanie dnia',
+    'settings.mottosTitle': 'Hasła (losowane codziennie)',
+    'settings.addMotto': '+ Dodaj hasło',
+    'settings.mottosEmpty': 'Brak haseł — dodaj pierwsze poniżej.',
+    'settings.imagesTitle': 'Obrazy zależne od wyniku dnia',
+    'settings.imageNegative': 'Wynik ujemny', 'settings.imageZero': 'Wynik zerowy', 'settings.imagePositive': 'Wynik dodatni',
+    'settings.choose': 'Wybierz',
+    'settings.backupTitle': 'Kopia zapasowa danych',
+    'settings.backupDesc': 'Pobierz plik z danymi tej aplikacji, aby przenieść je na inne urządzenie (bez konta w chmurze), lub wczytaj wcześniej pobraną kopię.',
+    'settings.exportBtn': '⬇️ Pobierz kopię',
+    'settings.importBtn': '⬆️ Wczytaj kopię',
+    'settings.deleteAll': '🗑️ Usuń wszystkie dane',
+    'install.title': 'Dodaj do ekranu głównego',
+    'install.desc': 'Zainstaluj aplikację, aby mieć szybki dostęp i powiadomienia badge z liczbą dni.',
+    'install.button': 'Zainstaluj',
+    'emoji.title': 'Wybierz emotikonę',
+    'emoji.customPlaceholder': 'Własna…',
+    'emoji.ok': 'OK',
+    'template.title': 'Wybierz gotowy nawyk',
+    'tile.newName': 'Nowy nawyk',
+    'tile.chooseEmoji': 'Wybierz emotikonę',
+    'tile.delete': 'Usuń kafelek',
+    'motto.newText': 'Nowe hasło',
+    'motto.delete': 'Usuń hasło',
+    'image.remove': 'Usuń obraz',
+    'alert.fileTooBig': 'Plik jest za duży (max 8 MB).',
+    'confirm.deleteTile': 'Usunąć ten kafelek?\nHistoria zapisów zostanie zachowana, ale nie będzie już widoczna.',
+    'confirm.deleteAll': 'Usunąć wszystkie dane?\nTej operacji nie można cofnąć.',
+    'alert.importBadFile': 'Nie udało się wczytać pliku — upewnij się, że to poprawna kopia danych z tej aplikacji.',
+    'confirm.importOverwrite': 'Wczytanie kopii zastąpi obecne dane na tym urządzeniu. Kontynuować?',
+    'alert.importDone': 'Dane zostały wczytane.',
+    'account.title': 'Konto',
+    'account.logout': 'Wyloguj',
+    'account.proActive': '☁️ Pro aktywne — dane synchronizowane z chmurą na każdym urządzeniu.',
+    'account.freeLocal': '📴 Wersja darmowa — dane zapisane tylko na tym urządzeniu.',
+    'account.loginGoogle': 'Zaloguj się przez Google',
+    'account.orEmail': 'lub e-mailem',
+    'account.emailPlaceholder': 'E-mail',
+    'account.passwordPlaceholder': 'Hasło (min. 6 znaków)',
+    'account.login': 'Zaloguj',
+    'account.register': 'Zarejestruj',
+    'account.forgotPassword': 'Nie pamiętasz hasła?',
+    'account.orNoAccount': 'lub bez konta',
+    'account.generateCode': '🔑 Wygeneruj kod (bez konta)',
+    'account.generatingCode': 'Generuję…',
+    'account.haveCodePlaceholder': 'Mam już kod…',
+    'account.loadCode': 'Wczytaj',
+    'account.noLoginLocalOnly': '📴 Bez logowania dane są zapisane tylko na tym urządzeniu.',
+    'account.syncCodeSaveWarning': 'Zapisz ten kod — to jedyny sposób, by przenieść dane na inne urządzenie. Nie udostępniaj go nikomu:',
+    'account.copyCode': '📋 Kopiuj kod',
+    'account.loginError': 'Błąd logowania: ',
+    'account.zalogowano': 'Zalogowano',
+    'err.emailInUse': 'Ten adres e-mail jest już zarejestrowany — zaloguj się zamiast rejestrować.',
+    'err.invalidEmail': 'Nieprawidłowy adres e-mail.',
+    'err.weakPassword': 'Hasło musi mieć co najmniej 6 znaków.',
+    'err.missingPassword': 'Podaj hasło.',
+    'err.invalidCredential': 'Nieprawidłowy e-mail lub hasło.',
+    'err.tooManyRequests': 'Zbyt wiele prób — spróbuj ponownie za chwilę.',
+    'err.enterEmailAndPassword': 'Podaj e-mail i hasło.',
+    'err.enterEmailFirst': 'Podaj najpierw swój adres e-mail w polu powyżej.',
+    'ok.resetSent': 'Wysłaliśmy link do zresetowania hasła na {email}',
+    'ok.codeGenError': 'Nie udało się wygenerować kodu: {err}',
+    'ok.pasteCode': 'Wklej kod.',
+    'ok.codeLoadError': 'Nie udało się wczytać kodu: {err}',
+    'ok.tipError': 'Nie udało się otworzyć płatności: {err}',
+    'pro.title': '⭐ {app} Pro',
+    'pro.active': 'Dziękujemy za wsparcie! Synchronizacja w chmurze jest aktywna.',
+    'pro.unlockTitle': '⭐ {app} Pro — {price} jednorazowo',
+    'pro.unlockDesc': 'Odblokuj synchronizację danych w chmurze między urządzeniami, na zawsze, bez subskrypcji.',
+    'pro.consent': 'Wyrażam zgodę na natychmiastowe udostępnienie treści cyfrowych i przyjmuję do wiadomości utratę prawa odstąpienia od umowy po aktywacji Pro. Zapoznałem/-am się z',
+    'pro.and': 'i',
+    'pro.terms': 'regulaminem',
+    'pro.privacy': 'polityką prywatności',
+    'pro.unlockButton': 'Odblokuj Pro — {price} jednorazowo',
+    'pro.openingCheckout': 'Otwieram płatność…',
+    'pro.consentRequired': 'Zaznacz zgodę, aby kontynuować zakup.',
+    'pro.checkoutError': 'Nie udało się otworzyć płatności: {err}',
+  },
+  en: {
+    appName: 'doanddont',
+    'nav.home': 'Home', 'nav.stats': 'Stats', 'nav.settings': 'Settings',
+    'home.mottoPlaceholder': 'Add quotes in Settings to see a daily motto.',
+    'home.less': 'Less', 'home.more': 'More',
+    'stats.title': 'Stats',
+    'stats.week': 'Week', 'stats.month': 'Month', 'stats.year': 'Year', 'stats.all': 'All time',
+    'stats.totalScore': 'Total score',
+    'stats.breakdown': 'Breakdown by habit',
+    'stats.dailyScore': 'Daily score',
+    'stats.dailyDetails': 'Daily details',
+    'stats.empty': 'No entries in this period.',
+    'stats.unitCount': '{count}× × {sign}{points}',
+    'settings.title': 'Settings',
+    'settings.account': 'Account',
+    'settings.cloudNotConfigured': '📴 Cloud sync not configured — data is saved only on this device.',
+    'settings.language': '🌐 Language',
+    'settings.tipTitle': '☕ Buy us a coffee',
+    'settings.tipDesc': 'Enjoying the app? You can voluntarily support its development — no account needed.',
+    'settings.addTile': '+ Add tile',
+    'settings.pickFromList': '📋 Pick from list',
+    'settings.dailySummary': 'Daily summary',
+    'settings.mottosTitle': 'Mottos (randomized daily)',
+    'settings.addMotto': '+ Add motto',
+    'settings.mottosEmpty': 'No mottos yet — add your first one below.',
+    'settings.imagesTitle': 'Images based on daily score',
+    'settings.imageNegative': 'Negative score', 'settings.imageZero': 'Zero score', 'settings.imagePositive': 'Positive score',
+    'settings.choose': 'Choose',
+    'settings.backupTitle': 'Data backup',
+    'settings.backupDesc': 'Download a file with this app\'s data to move it to another device (without a cloud account), or load a previously downloaded backup.',
+    'settings.exportBtn': '⬇️ Download backup',
+    'settings.importBtn': '⬆️ Load backup',
+    'settings.deleteAll': '🗑️ Delete all data',
+    'install.title': 'Add to Home Screen',
+    'install.desc': 'Install the app for quick access and badge notifications with your day count.',
+    'install.button': 'Install',
+    'emoji.title': 'Choose an emoji',
+    'emoji.customPlaceholder': 'Custom…',
+    'emoji.ok': 'OK',
+    'template.title': 'Choose a ready-made habit',
+    'tile.newName': 'New habit',
+    'tile.chooseEmoji': 'Choose an emoji',
+    'tile.delete': 'Delete tile',
+    'motto.newText': 'New motto',
+    'motto.delete': 'Delete motto',
+    'image.remove': 'Remove image',
+    'alert.fileTooBig': 'File is too large (max 8 MB).',
+    'confirm.deleteTile': 'Delete this tile?\nLogged history will be kept, but no longer visible.',
+    'confirm.deleteAll': 'Delete all data?\nThis cannot be undone.',
+    'alert.importBadFile': 'Could not load the file — make sure it\'s a valid backup from this app.',
+    'confirm.importOverwrite': 'Loading this backup will replace the current data on this device. Continue?',
+    'alert.importDone': 'Data has been loaded.',
+    'account.title': 'Account',
+    'account.logout': 'Log out',
+    'account.proActive': '☁️ Pro active — data synced to the cloud on every device.',
+    'account.freeLocal': '📴 Free version — data saved only on this device.',
+    'account.loginGoogle': 'Sign in with Google',
+    'account.orEmail': 'or by email',
+    'account.emailPlaceholder': 'Email',
+    'account.passwordPlaceholder': 'Password (min. 6 characters)',
+    'account.login': 'Sign in',
+    'account.register': 'Sign up',
+    'account.forgotPassword': 'Forgot your password?',
+    'account.orNoAccount': 'or without an account',
+    'account.generateCode': '🔑 Generate code (no account)',
+    'account.generatingCode': 'Generating…',
+    'account.haveCodePlaceholder': 'I already have a code…',
+    'account.loadCode': 'Load',
+    'account.noLoginLocalOnly': '📴 Without signing in, data is saved only on this device.',
+    'account.syncCodeSaveWarning': 'Save this code — it\'s the only way to move your data to another device. Don\'t share it with anyone:',
+    'account.copyCode': '📋 Copy code',
+    'account.loginError': 'Sign-in error: ',
+    'account.zalogowano': 'Signed in',
+    'err.emailInUse': 'This email is already registered — sign in instead of signing up.',
+    'err.invalidEmail': 'Invalid email address.',
+    'err.weakPassword': 'Password must be at least 6 characters.',
+    'err.missingPassword': 'Enter a password.',
+    'err.invalidCredential': 'Invalid email or password.',
+    'err.tooManyRequests': 'Too many attempts — try again shortly.',
+    'err.enterEmailAndPassword': 'Enter an email and password.',
+    'err.enterEmailFirst': 'Enter your email address in the field above first.',
+    'ok.resetSent': 'We sent a password reset link to {email}',
+    'ok.codeGenError': 'Could not generate a code: {err}',
+    'ok.pasteCode': 'Paste a code.',
+    'ok.codeLoadError': 'Could not load the code: {err}',
+    'ok.tipError': 'Could not open checkout: {err}',
+    'pro.title': '⭐ {app} Pro',
+    'pro.active': 'Thanks for your support! Cloud sync is active.',
+    'pro.unlockTitle': '⭐ {app} Pro — {price} one-time',
+    'pro.unlockDesc': 'Unlock cloud sync between devices, forever, no subscription.',
+    'pro.consent': 'I consent to immediate delivery of digital content and acknowledge losing my right of withdrawal once Pro is activated. I have read the',
+    'pro.and': 'and',
+    'pro.terms': 'terms',
+    'pro.privacy': 'privacy policy',
+    'pro.unlockButton': 'Unlock Pro — {price} one-time',
+    'pro.openingCheckout': 'Opening checkout…',
+    'pro.consentRequired': 'Please check the consent box to continue.',
+    'pro.checkoutError': 'Could not open checkout: {err}',
+  },
+  es: {
+    appName: 'robienierobie',
+    'nav.home': 'Inicio', 'nav.stats': 'Estadísticas', 'nav.settings': 'Ajustes',
+    'home.mottoPlaceholder': 'Añade frases en Ajustes para ver el lema del día.',
+    'home.less': 'Menos', 'home.more': 'Más',
+    'stats.title': 'Estadísticas',
+    'stats.week': 'Semana', 'stats.month': 'Mes', 'stats.year': 'Año', 'stats.all': 'Todo',
+    'stats.totalScore': 'Puntuación total',
+    'stats.breakdown': 'Desglose por hábito',
+    'stats.dailyScore': 'Puntuación diaria',
+    'stats.dailyDetails': 'Detalles diarios',
+    'stats.empty': 'Sin registros en este período.',
+    'stats.unitCount': '{count} uds. × {sign}{points}',
+    'settings.title': 'Ajustes',
+    'settings.account': 'Cuenta',
+    'settings.cloudNotConfigured': '📴 Sincronización en la nube no configurada — los datos se guardan solo en este dispositivo.',
+    'settings.language': '🌐 Idioma',
+    'settings.tipTitle': '☕ Invítanos a un café',
+    'settings.tipDesc': '¿Te gusta la app? Puedes apoyar voluntariamente su desarrollo — sin crear una cuenta.',
+    'settings.addTile': '+ Añadir hábito',
+    'settings.pickFromList': '📋 Elegir de la lista',
+    'settings.dailySummary': 'Resumen del día',
+    'settings.mottosTitle': 'Frases (aleatorias cada día)',
+    'settings.addMotto': '+ Añadir frase',
+    'settings.mottosEmpty': 'Sin frases todavía — añade la primera abajo.',
+    'settings.imagesTitle': 'Imágenes según la puntuación del día',
+    'settings.imageNegative': 'Puntuación negativa', 'settings.imageZero': 'Puntuación cero', 'settings.imagePositive': 'Puntuación positiva',
+    'settings.choose': 'Elegir',
+    'settings.backupTitle': 'Copia de seguridad',
+    'settings.backupDesc': 'Descarga un archivo con los datos de esta app para moverlos a otro dispositivo (sin cuenta en la nube), o carga una copia descargada previamente.',
+    'settings.exportBtn': '⬇️ Descargar copia',
+    'settings.importBtn': '⬆️ Cargar copia',
+    'settings.deleteAll': '🗑️ Eliminar todos los datos',
+    'install.title': 'Añadir a la pantalla de inicio',
+    'install.desc': 'Instala la app para acceso rápido y notificaciones con tu racha de días.',
+    'install.button': 'Instalar',
+    'emoji.title': 'Elige un emoji',
+    'emoji.customPlaceholder': 'Personalizado…',
+    'emoji.ok': 'OK',
+    'template.title': 'Elige un hábito predefinido',
+    'tile.newName': 'Nuevo hábito',
+    'tile.chooseEmoji': 'Elige un emoji',
+    'tile.delete': 'Eliminar hábito',
+    'motto.newText': 'Nueva frase',
+    'motto.delete': 'Eliminar frase',
+    'image.remove': 'Quitar imagen',
+    'alert.fileTooBig': 'El archivo es demasiado grande (máx. 8 MB).',
+    'confirm.deleteTile': '¿Eliminar este hábito?\nEl historial se conservará, pero ya no será visible.',
+    'confirm.deleteAll': '¿Eliminar todos los datos?\nEsta acción no se puede deshacer.',
+    'alert.importBadFile': 'No se pudo cargar el archivo — asegúrate de que es una copia válida de esta app.',
+    'confirm.importOverwrite': 'Cargar esta copia reemplazará los datos actuales en este dispositivo. ¿Continuar?',
+    'alert.importDone': 'Los datos se han cargado.',
+    'account.title': 'Cuenta',
+    'account.logout': 'Cerrar sesión',
+    'account.proActive': '☁️ Pro activo — datos sincronizados en la nube en todos los dispositivos.',
+    'account.freeLocal': '📴 Versión gratuita — datos guardados solo en este dispositivo.',
+    'account.loginGoogle': 'Iniciar sesión con Google',
+    'account.orEmail': 'o por correo electrónico',
+    'account.emailPlaceholder': 'Correo electrónico',
+    'account.passwordPlaceholder': 'Contraseña (mín. 6 caracteres)',
+    'account.login': 'Iniciar sesión',
+    'account.register': 'Registrarse',
+    'account.forgotPassword': '¿Olvidaste tu contraseña?',
+    'account.orNoAccount': 'o sin cuenta',
+    'account.generateCode': '🔑 Generar código (sin cuenta)',
+    'account.generatingCode': 'Generando…',
+    'account.haveCodePlaceholder': 'Ya tengo un código…',
+    'account.loadCode': 'Cargar',
+    'account.noLoginLocalOnly': '📴 Sin iniciar sesión, los datos se guardan solo en este dispositivo.',
+    'account.syncCodeSaveWarning': 'Guarda este código — es la única forma de mover tus datos a otro dispositivo. No lo compartas con nadie:',
+    'account.copyCode': '📋 Copiar código',
+    'account.loginError': 'Error de inicio de sesión: ',
+    'account.zalogowano': 'Sesión iniciada',
+    'err.emailInUse': 'Este correo ya está registrado — inicia sesión en lugar de registrarte.',
+    'err.invalidEmail': 'Correo electrónico no válido.',
+    'err.weakPassword': 'La contraseña debe tener al menos 6 caracteres.',
+    'err.missingPassword': 'Introduce una contraseña.',
+    'err.invalidCredential': 'Correo o contraseña incorrectos.',
+    'err.tooManyRequests': 'Demasiados intentos — inténtalo de nuevo en un momento.',
+    'err.enterEmailAndPassword': 'Introduce correo y contraseña.',
+    'err.enterEmailFirst': 'Introduce primero tu correo electrónico en el campo de arriba.',
+    'ok.resetSent': 'Enviamos un enlace para restablecer la contraseña a {email}',
+    'ok.codeGenError': 'No se pudo generar el código: {err}',
+    'ok.pasteCode': 'Pega un código.',
+    'ok.codeLoadError': 'No se pudo cargar el código: {err}',
+    'ok.tipError': 'No se pudo abrir el pago: {err}',
+    'pro.title': '⭐ {app} Pro',
+    'pro.active': '¡Gracias por tu apoyo! La sincronización en la nube está activa.',
+    'pro.unlockTitle': '⭐ {app} Pro — {price} pago único',
+    'pro.unlockDesc': 'Desbloquea la sincronización de datos en la nube entre dispositivos, para siempre, sin suscripción.',
+    'pro.consent': 'Doy mi consentimiento para la entrega inmediata de contenido digital y reconozco que pierdo mi derecho de desistimiento al activar Pro. He leído los',
+    'pro.and': 'y la',
+    'pro.terms': 'términos',
+    'pro.privacy': 'política de privacidad',
+    'pro.unlockButton': 'Desbloquear Pro — {price} pago único',
+    'pro.openingCheckout': 'Abriendo pago…',
+    'pro.consentRequired': 'Marca la casilla de consentimiento para continuar.',
+    'pro.checkoutError': 'No se pudo abrir el pago: {err}',
+  },
+};
+
+const LOCALE_MAP = { pl: 'pl-PL', en: 'en-US', es: 'es-ES' };
+
+function detectLang() {
+  const saved = localStorage.getItem(LANG_KEY);
+  if (saved && I18N[saved]) return saved;
+  const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  return I18N[nav] ? nav : 'en';
+}
+
+let currentLang = detectLang();
+
+function tr(key, vars) {
+  let str = (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
+  if (vars) Object.keys(vars).forEach(k => { str = str.split('{' + k + '}').join(vars[k]); });
+  return str;
+}
+
+function applyI18n() {
+  document.documentElement.lang = currentLang;
+  document.title = tr('appName');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = tr(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = tr(el.dataset.i18nPlaceholder); });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', tr(el.dataset.i18nAria)); });
+}
+
+function setLanguage(lang) {
+  if (!I18N[lang] || lang === currentLang) return;
+  currentLang = lang;
+  localStorage.setItem(LANG_KEY, lang);
+  applyI18n();
+  renderHome();
+  renderSettings();
+  if ($('page-stats').classList.contains('active')) renderStats();
+  if (typeof window.refreshAccountUI === 'function') window.refreshAccountUI();
+}
+window.t = tr;
+window.getCurrentLang = () => currentLang;
+
+
+const DEFAULT_TILES_BY_LANG = {
+  pl: [
+    { id: 'papierosy',   name: 'Papierosy',           emoji: '🚬', points: -5 },
+    { id: 'alkohol',     name: 'Alkohol',             emoji: '🍺', points: -3 },
+    { id: 'rozciaganie', name: 'Rozciąganie',         emoji: '🧘', points: 3 },
+    { id: 'trening',     name: 'Trening',             emoji: '💪', points: 10 },
+    { id: 'jedzenie',    name: 'Jedzenie na mieście', emoji: '🍔', points: -3 },
+  ],
+  en: [
+    { id: 'papierosy',   name: 'Cigarettes',    emoji: '🚬', points: -5 },
+    { id: 'alkohol',     name: 'Alcohol',        emoji: '🍺', points: -3 },
+    { id: 'rozciaganie', name: 'Stretching',     emoji: '🧘', points: 3 },
+    { id: 'trening',     name: 'Workout',        emoji: '💪', points: 10 },
+    { id: 'jedzenie',    name: 'Eating out',     emoji: '🍔', points: -3 },
+  ],
+  es: [
+    { id: 'papierosy',   name: 'Cigarrillos',       emoji: '🚬', points: -5 },
+    { id: 'alkohol',     name: 'Alcohol',           emoji: '🍺', points: -3 },
+    { id: 'rozciaganie', name: 'Estiramientos',     emoji: '🧘', points: 3 },
+    { id: 'trening',     name: 'Entrenamiento',     emoji: '💪', points: 10 },
+    { id: 'jedzenie',    name: 'Comer fuera',       emoji: '🍔', points: -3 },
+  ],
+};
+function getDefaultTiles() { return DEFAULT_TILES_BY_LANG[currentLang] || DEFAULT_TILES_BY_LANG.en; }
 
 let S = {
-  tiles: DEFAULT_TILES.map(t => ({ ...t })),
+  tiles: getDefaultTiles().map(t => ({ ...t })),
   log: {},          // { '2026-09-09': { papierosy: 2, trening: 1 } }
   mottos: [],        // string[]
   summaryImages: {}  // { negative, zero, positive } -> data URL
@@ -723,7 +1086,7 @@ function loadState() {
 // ════════════════════════════════════════════════════ HOME PAGE ═══════════════
 function renderHome() {
   const now = new Date();
-  $('h-date').textContent = now.toLocaleDateString('pl-PL', {
+  $('h-date').textContent = now.toLocaleDateString(LOCALE_MAP[currentLang] || 'en-US', {
     weekday: 'long', day: 'numeric', month: 'long'
   });
 
@@ -738,8 +1101,8 @@ function renderHome() {
         <div class="tile-name">${escapeHtml(t.name)}</div>
         <div class="tile-count" id="count-${t.id}">${count}</div>
         <div class="tile-controls">
-          <button class="tile-btn minus" onclick="changeCount('${t.id}',-1)" aria-label="Mniej">−</button>
-          <button class="tile-btn plus" onclick="changeCount('${t.id}',1)" aria-label="Więcej">+</button>
+          <button class="tile-btn minus" onclick="changeCount('${t.id}',-1)" aria-label="${tr('home.less')}">−</button>
+          <button class="tile-btn plus" onclick="changeCount('${t.id}',1)" aria-label="${tr('home.more')}">+</button>
         </div>
       </div>`;
   }).join('');
@@ -780,7 +1143,7 @@ function renderSummaryTile() {
   else { imgEl.removeAttribute('src'); imgEl.style.display = 'none'; }
 
   const motto = getDailyMotto();
-  $('summary-motto').textContent = motto || 'Dodaj hasła w Ustawieniach, aby zobaczyć motto dnia.';
+  $('summary-motto').textContent = motto || tr('home.mottoPlaceholder');
 }
 
 function changeCount(tileId, delta) {
@@ -854,7 +1217,7 @@ function renderStats() {
     return dayScore;
   });
 
-  const fmt = ds => new Date(ds).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' });
+  const fmt = ds => new Date(ds).toLocaleDateString(LOCALE_MAP[currentLang] || 'en-US', { day: 'numeric', month: 'short' });
   $('st-period-range').textContent = dates.length ? `${fmt(dates[0])} – ${fmt(dates[dates.length - 1])}` : '';
 
   const scoreEl = $('st-total-score');
@@ -874,12 +1237,12 @@ function renderStats() {
           <span class="stat-tile-emoji">${escapeHtml(r.tile.emoji)}</span>
           <div>
             <div class="stat-tile-name">${escapeHtml(r.tile.name)}</div>
-            <div class="stat-tile-sub">${r.count} szt. × ${r.tile.points > 0 ? '+' : ''}${r.tile.points}</div>
+            <div class="stat-tile-sub">${tr('stats.unitCount', { count: r.count, sign: r.tile.points > 0 ? '+' : '', points: r.tile.points })}</div>
           </div>
         </div>
         <div class="stat-tile-score" style="color:${r.score > 0 ? 'var(--green)' : r.score < 0 ? 'var(--red)' : 'var(--text)'}">${r.score > 0 ? '+' : ''}${r.score}</div>
       </div>`).join('')
-    : '<div class="empty-state">Brak wpisów w tym okresie.</div>';
+    : `<div class="empty-state">${tr('stats.empty')}</div>`;
 
   renderDailyList(dates, tileMap);
   drawStatsChart(dates, dailyScores);
@@ -898,7 +1261,7 @@ function renderDailyList(dates, tileMap) {
         .map(([tileId, count]) => ({ tile: tileMap[tileId], count }))
         .filter(i => i.tile);
       const dayScore = items.reduce((sum, i) => sum + i.count * i.tile.points, 0);
-      const label = new Date(ds).toLocaleDateString('pl-PL', { weekday: 'short', day: 'numeric', month: 'short' });
+      const label = new Date(ds).toLocaleDateString(LOCALE_MAP[currentLang] || 'en-US', { weekday: 'short', day: 'numeric', month: 'short' });
 
       return `
         <div class="day-group">
@@ -915,7 +1278,7 @@ function renderDailyList(dates, tileMap) {
           </div>
         </div>`;
     }).join('')
-    : '<div class="empty-state">Brak wpisów w tym okresie.</div>';
+    : `<div class="empty-state">${tr('stats.empty')}</div>`;
 }
 
 
@@ -984,22 +1347,44 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 // ════════════════════════════════════════════════════ SETTINGS ════════════════
+// Prices live here (client) only for display; the Cloud Function re-derives the
+// authoritative amount+currency server-side from the same tier index — never trusted from the client.
+const PRICING_BY_LANG = {
+  pl: { proLabel: '50 zł', tipLabels: ['5 zł', '10 zł', '20 zł', '50 zł'] },
+  en: { proLabel: '$12.99', tipLabels: ['$1', '$3', '$5', '$10'] },
+  es: { proLabel: '11,99 €', tipLabels: ['1 €', '3 €', '5 €', '10 €'] },
+};
+function getPricing() { return PRICING_BY_LANG[currentLang] || PRICING_BY_LANG.en; }
+window.getPricing = getPricing;
+
+function renderTipAmounts() {
+  const box = $('cfg-tip-amounts');
+  if (!box) return;
+  box.innerHTML = getPricing().tipLabels.map((label, i) =>
+    `<button class="btn-secondary" onclick="startTipCheckout(${i})">${label}</button>`).join('');
+}
+
 function renderSettings() {
   const accountBox = $('cfg-account');
   if (accountBox && !accountBox.dataset.cloudReady) {
-    accountBox.innerHTML = `<div class="account-title">Konto</div>
-      <div class="account-status">📴 Synchronizacja z chmurą nieskonfigurowana — dane są zapisane tylko na tym urządzeniu.</div>`;
+    accountBox.innerHTML = `<div class="account-title">${tr('account.title')}</div>
+      <div class="account-status">${tr('settings.cloudNotConfigured')}</div>`;
   }
+
+  const langSelect = $('cfg-lang-select');
+  if (langSelect) langSelect.value = currentLang;
+
+  renderTipAmounts();
 
   $('cfg-tiles').innerHTML = S.tiles.map(t => `
     <div class="settings-tile-row">
-      <button type="button" class="settings-emoji-input" aria-label="Wybierz emotikonę"
+      <button type="button" class="settings-emoji-input" aria-label="${tr('tile.chooseEmoji')}"
         onclick="openEmojiPicker('${t.id}')">${escapeHtml(t.emoji)}</button>
       <input class="settings-name-input" value="${escapeHtml(t.name)}"
         oninput="updateTileField('${t.id}','name',this.value)">
       <input class="settings-points-input" type="number" min="-10" max="10" value="${t.points}"
         onchange="updateTileField('${t.id}','points',this.value)">
-      <button class="tile-del-btn" onclick="removeTile('${t.id}')" aria-label="Usuń kafelek">🗑️</button>
+      <button class="tile-del-btn" onclick="removeTile('${t.id}')" aria-label="${tr('tile.delete')}">🗑️</button>
     </div>`).join('');
 
 
@@ -1014,14 +1399,14 @@ function renderMottosSettings() {
     ? S.mottos.map((m, i) => `
       <div class="motto-row">
         <input class="motto-input" value="${escapeHtml(m)}" oninput="updateMotto(${i}, this.value)">
-        <button class="tile-del-btn" onclick="removeMotto(${i})" aria-label="Usuń hasło">🗑️</button>
+        <button class="tile-del-btn" onclick="removeMotto(${i})" aria-label="${tr('motto.delete')}">🗑️</button>
       </div>`).join('')
-    : '<div class="empty-state">Brak haseł — dodaj pierwsze poniżej.</div>';
+    : `<div class="empty-state">${tr('settings.mottosEmpty')}</div>`;
 }
 
 function addMotto() {
   if (!S.mottos) S.mottos = [];
-  S.mottos.push('Nowe hasło');
+  S.mottos.push(tr('motto.newText'));
   persist();
   renderMottosSettings();
   renderHome();
@@ -1056,7 +1441,7 @@ function onSummaryImagePicked(key, input) {
   const file = input.files && input.files[0];
   input.value = '';
   if (!file) return;
-  if (file.size > MAX_SUMMARY_IMAGE_FILE_SIZE) { alert('Plik jest za duży (max 8 MB).'); return; }
+  if (file.size > MAX_SUMMARY_IMAGE_FILE_SIZE) { alert(tr('alert.fileTooBig')); return; }
 
   const reader = new FileReader();
   reader.onload = e => {
@@ -1110,7 +1495,7 @@ function updateTileField(id, field, value) {
 
 function addTile() {
   const id = 'tile_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-  S.tiles.push({ id, name: 'Nowy nawyk', emoji: '⭐', points: 0 });
+  S.tiles.push({ id, name: tr('tile.newName'), emoji: '⭐', points: 0 });
   persist();
   renderSettings();
   renderHome();
@@ -1119,31 +1504,79 @@ function addTile() {
 // ════════════════════════════════════════════════════ TILE TEMPLATES ══════════
 // Gotowe propozycje nawyków — czysto opcjonalne; user może je dodać, edytować lub
 // zignorować i tworzyć własne kafelki od zera.
-const HABIT_TEMPLATES = [
-  { name: 'Papierosy',            emoji: '🚬', points: -5 },
-  { name: 'Alkohol',               emoji: '🍺', points: -3 },
-  { name: 'Słodycze',              emoji: '🍫', points: -2 },
-  { name: 'Fast food',             emoji: '🍔', points: -3 },
-  { name: 'Hazard',                emoji: '🎰', points: -5 },
-  { name: 'Scrollowanie telefonu', emoji: '📱', points: -2 },
-  { name: 'Nocne podjadanie',      emoji: '🌙', points: -2 },
-  { name: 'Spóźnienie',            emoji: '⏰', points: -1 },
-  { name: 'Trening',               emoji: '💪', points: 10 },
-  { name: 'Bieganie',              emoji: '🏃', points: 8 },
-  { name: 'Rozciąganie',           emoji: '🧘', points: 3 },
-  { name: 'Spacer',                emoji: '🚶', points: 4 },
-  { name: 'Picie wody',            emoji: '💧', points: 2 },
-  { name: 'Czytanie',              emoji: '📖', points: 5 },
-  { name: 'Nauka',                 emoji: '📚', points: 4 },
-  { name: 'Medytacja',             emoji: '🧘‍♂️', points: 5 },
-  { name: 'Dziennik',              emoji: '✍️', points: 3 },
-  { name: 'Wczesna pobudka',       emoji: '🌅', points: 3 },
-  { name: 'Zdrowy sen (8h)',       emoji: '😴', points: 3 },
-  { name: 'Brak cukru',            emoji: '🚫', points: 4 },
-];
+const HABIT_TEMPLATES_BY_LANG = {
+  pl: [
+    { name: 'Papierosy',            emoji: '🚬', points: -5 },
+    { name: 'Alkohol',               emoji: '🍺', points: -3 },
+    { name: 'Słodycze',              emoji: '🍫', points: -2 },
+    { name: 'Fast food',             emoji: '🍔', points: -3 },
+    { name: 'Hazard',                emoji: '🎰', points: -5 },
+    { name: 'Scrollowanie telefonu', emoji: '📱', points: -2 },
+    { name: 'Nocne podjadanie',      emoji: '🌙', points: -2 },
+    { name: 'Spóźnienie',            emoji: '⏰', points: -1 },
+    { name: 'Trening',               emoji: '💪', points: 10 },
+    { name: 'Bieganie',              emoji: '🏃', points: 8 },
+    { name: 'Rozciąganie',           emoji: '🧘', points: 3 },
+    { name: 'Spacer',                emoji: '🚶', points: 4 },
+    { name: 'Picie wody',            emoji: '💧', points: 2 },
+    { name: 'Czytanie',              emoji: '📖', points: 5 },
+    { name: 'Nauka',                 emoji: '📚', points: 4 },
+    { name: 'Medytacja',             emoji: '🧘', points: 5 },
+    { name: 'Dziennik',              emoji: '✍️', points: 3 },
+    { name: 'Wczesna pobudka',       emoji: '🌅', points: 3 },
+    { name: 'Zdrowy sen (8h)',       emoji: '😴', points: 3 },
+    { name: 'Brak cukru',            emoji: '🚫', points: 4 },
+  ],
+  en: [
+    { name: 'Cigarettes',        emoji: '🚬', points: -5 },
+    { name: 'Alcohol',           emoji: '🍺', points: -3 },
+    { name: 'Sweets',            emoji: '🍫', points: -2 },
+    { name: 'Fast food',         emoji: '🍔', points: -3 },
+    { name: 'Gambling',          emoji: '🎰', points: -5 },
+    { name: 'Phone scrolling',   emoji: '📱', points: -2 },
+    { name: 'Night snacking',    emoji: '🌙', points: -2 },
+    { name: 'Being late',        emoji: '⏰', points: -1 },
+    { name: 'Workout',           emoji: '💪', points: 10 },
+    { name: 'Running',          emoji: '🏃', points: 8 },
+    { name: 'Stretching',        emoji: '🧘', points: 3 },
+    { name: 'Walk',              emoji: '🚶', points: 4 },
+    { name: 'Drinking water',    emoji: '💧', points: 2 },
+    { name: 'Reading',           emoji: '📖', points: 5 },
+    { name: 'Studying',          emoji: '📚', points: 4 },
+    { name: 'Meditation',        emoji: '🧘', points: 5 },
+    { name: 'Journaling',        emoji: '✍️', points: 3 },
+    { name: 'Early wake-up',     emoji: '🌅', points: 3 },
+    { name: 'Healthy sleep (8h)', emoji: '😴', points: 3 },
+    { name: 'No sugar',          emoji: '🚫', points: 4 },
+  ],
+  es: [
+    { name: 'Cigarrillos',        emoji: '🚬', points: -5 },
+    { name: 'Alcohol',            emoji: '🍺', points: -3 },
+    { name: 'Dulces',             emoji: '🍫', points: -2 },
+    { name: 'Comida rápida',      emoji: '🍔', points: -3 },
+    { name: 'Apuestas',           emoji: '🎰', points: -5 },
+    { name: 'Scroll del móvil',   emoji: '📱', points: -2 },
+    { name: 'Comer de noche',     emoji: '🌙', points: -2 },
+    { name: 'Llegar tarde',       emoji: '⏰', points: -1 },
+    { name: 'Entrenamiento',      emoji: '💪', points: 10 },
+    { name: 'Correr',             emoji: '🏃', points: 8 },
+    { name: 'Estiramientos',      emoji: '🧘', points: 3 },
+    { name: 'Caminar',            emoji: '🚶', points: 4 },
+    { name: 'Beber agua',         emoji: '💧', points: 2 },
+    { name: 'Leer',               emoji: '📖', points: 5 },
+    { name: 'Estudiar',           emoji: '📚', points: 4 },
+    { name: 'Meditación',         emoji: '🧘', points: 5 },
+    { name: 'Diario',             emoji: '✍️', points: 3 },
+    { name: 'Despertar temprano', emoji: '🌅', points: 3 },
+    { name: 'Dormir bien (8h)',   emoji: '😴', points: 3 },
+    { name: 'Sin azúcar',         emoji: '🚫', points: 4 },
+  ],
+};
+function getHabitTemplates() { return HABIT_TEMPLATES_BY_LANG[currentLang] || HABIT_TEMPLATES_BY_LANG.en; }
+
 
 function openTileTemplatePicker() {
-  $('template-list').innerHTML = HABIT_TEMPLATES.map((t, i) => `
+  $('template-list').innerHTML = getHabitTemplates().map((t, i) => `
     <div class="template-option" onclick="addTileFromTemplate(${i})">
       <span class="t-emoji">${t.emoji}</span>
       <span class="t-name">${escapeHtml(t.name)}</span>
@@ -1157,7 +1590,7 @@ function closeTileTemplatePicker() {
 }
 
 function addTileFromTemplate(index) {
-  const t = HABIT_TEMPLATES[index];
+  const t = getHabitTemplates()[index];
   if (!t) return;
   const id = 'tile_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
   S.tiles.push({ id, name: t.name, emoji: t.emoji, points: t.points });
@@ -1168,7 +1601,7 @@ function addTileFromTemplate(index) {
 }
 
 function removeTile(id) {
-  if (!confirm('Usunąć ten kafelek?\nHistoria zapisów zostanie zachowana, ale nie będzie już widoczna.')) return;
+  if (!confirm(tr('confirm.deleteTile'))) return;
   S.tiles = S.tiles.filter(t => t.id !== id);
   persist();
   renderSettings();
@@ -1239,14 +1672,14 @@ function importData(input) {
     try {
       parsed = JSON.parse(e.target.result);
     } catch (err) {
-      alert('Nie udało się wczytać pliku — upewnij się, że to poprawna kopia danych z tej aplikacji.');
+      alert(tr('alert.importBadFile'));
       return;
     }
     if (!parsed || typeof parsed !== 'object') {
-      alert('Nie udało się wczytać pliku — upewnij się, że to poprawna kopia danych z tej aplikacji.');
+      alert(tr('alert.importBadFile'));
       return;
     }
-    if (!confirm('Wczytanie kopii zastąpi obecne dane na tym urządzeniu. Kontynuować?')) return;
+    if (!confirm(tr('confirm.importOverwrite'))) return;
 
     S.tiles = Array.isArray(parsed.tiles) && parsed.tiles.length ? parsed.tiles : S.tiles;
     S.log = parsed.log && typeof parsed.log === 'object' ? parsed.log : {};
@@ -1256,13 +1689,13 @@ function importData(input) {
     renderHome();
     renderSettings();
     if ($('page-stats').classList.contains('active')) renderStats();
-    alert('Dane zostały wczytane.');
+    alert(tr('alert.importDone'));
   };
   reader.readAsText(file);
 }
 
 function resetAll() {
-  if (!confirm('Usunąć wszystkie dane?\nTej operacji nie można cofnąć.')) return;
+  if (!confirm(tr('confirm.deleteAll'))) return;
   localStorage.removeItem(STORAGE_KEY);
   location.reload();
 }
@@ -1280,6 +1713,7 @@ function goPage(name) {
 
 // ════════════════════════════════════════════════════ BOOT ════════════════════
 function init() {
+  applyI18n();
   loadState();
   renderHome();
   renderSettings();
@@ -1388,7 +1822,7 @@ init();
           signInWithRedirect(auth, authProvider);
         } else if (err.code !== 'auth/cancelled-popup-request' && err.code !== 'auth/popup-closed-by-user') {
           console.error('Sign-in failed', err);
-          alert('Błąd logowania: ' + err.message);
+          alert(window.t('account.loginError') + err.message);
         }
       }
     }
@@ -1399,14 +1833,14 @@ init();
 
     function emailAuthErrorMessage(err) {
       switch (err.code) {
-        case 'auth/email-already-in-use': return 'Ten adres e-mail jest już zarejestrowany — zaloguj się zamiast rejestrować.';
-        case 'auth/invalid-email':        return 'Nieprawidłowy adres e-mail.';
-        case 'auth/weak-password':        return 'Hasło musi mieć co najmniej 6 znaków.';
-        case 'auth/missing-password':      return 'Podaj hasło.';
+        case 'auth/email-already-in-use': return window.t('err.emailInUse');
+        case 'auth/invalid-email':        return window.t('err.invalidEmail');
+        case 'auth/weak-password':        return window.t('err.weakPassword');
+        case 'auth/missing-password':      return window.t('err.missingPassword');
         case 'auth/invalid-credential':
         case 'auth/wrong-password':
-        case 'auth/user-not-found':        return 'Nieprawidłowy e-mail lub hasło.';
-        case 'auth/too-many-requests':     return 'Zbyt wiele prób — spróbuj ponownie za chwilę.';
+        case 'auth/user-not-found':        return window.t('err.invalidCredential');
+        case 'auth/too-many-requests':     return window.t('err.tooManyRequests');
         default:                           return err.message || String(err);
       }
     }
@@ -1414,7 +1848,7 @@ init();
     window.emailSignUp = async () => {
       const email = document.getElementById('cfg-email-input').value.trim();
       const password = document.getElementById('cfg-password-input').value;
-      if (!email || !password) { alert('Podaj e-mail i hasło.'); return; }
+      if (!email || !password) { alert(window.t('err.enterEmailAndPassword')); return; }
       try {
         await createUserWithEmailAndPassword(auth, email, password);
       } catch (err) {
@@ -1425,7 +1859,7 @@ init();
     window.emailSignIn = async () => {
       const email = document.getElementById('cfg-email-input').value.trim();
       const password = document.getElementById('cfg-password-input').value;
-      if (!email || !password) { alert('Podaj e-mail i hasło.'); return; }
+      if (!email || !password) { alert(window.t('err.enterEmailAndPassword')); return; }
       try {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (err) {
@@ -1435,10 +1869,10 @@ init();
 
     window.emailForgotPassword = async () => {
       const email = document.getElementById('cfg-email-input').value.trim();
-      if (!email) { alert('Podaj najpierw swój adres e-mail w polu powyżej.'); return; }
+      if (!email) { alert(window.t('err.enterEmailFirst')); return; }
       try {
         await sendPasswordResetEmail(auth, email);
-        alert('Wysłaliśmy link do zresetowania hasła na ' + email);
+        alert(window.t('ok.resetSent', { email }));
       } catch (err) {
         alert(emailAuthErrorMessage(err));
       }
@@ -1448,7 +1882,7 @@ init();
     // redeemable on another device via a custom token — no email/password/OAuth involved.
     window.generateSyncCode = async () => {
       const btn = document.getElementById('cfg-gencode-btn');
-      if (btn) { btn.disabled = true; btn.textContent = 'Generuję…'; }
+      if (btn) { btn.disabled = true; btn.textContent = window.t('account.generatingCode'); }
       try {
         if (!auth.currentUser) await signInAnonymously(auth);
         const generate = httpsCallable(functions, 'generateSyncCode');
@@ -1456,40 +1890,40 @@ init();
         const box = document.getElementById('cfg-synccode-result');
         if (box) {
           box.style.display = '';
-          box.innerHTML = `<div class="account-status">Zapisz ten kod — to jedyny sposób, by przenieść dane na inne urządzenie. Nie udostępniaj go nikomu:</div>
+          box.innerHTML = `<div class="account-status">${window.t('account.syncCodeSaveWarning')}</div>
             <div class="sync-code-value">${window.escapeHtml(data.code)}</div>
-            <button type="button" class="btn-secondary" onclick="navigator.clipboard.writeText('${data.code}')">📋 Kopiuj kod</button>`;
+            <button type="button" class="btn-secondary" onclick="navigator.clipboard.writeText('${data.code}')">${window.t('account.copyCode')}</button>`;
         }
       } catch (err) {
         console.error('generateSyncCode failed', err);
-        alert('Nie udało się wygenerować kodu: ' + (err.message || err));
+        alert(window.t('ok.codeGenError', { err: err.message || err }));
       } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '🔑 Wygeneruj kod (bez konta)'; }
+        if (btn) { btn.disabled = false; btn.textContent = window.t('account.generateCode'); }
       }
     };
 
     window.redeemSyncCode = async () => {
       const input = document.getElementById('cfg-redeemcode-input');
       const code = input ? input.value.trim() : '';
-      if (!code) { alert('Wklej kod.'); return; }
+      if (!code) { alert(window.t('ok.pasteCode')); return; }
       try {
         const redeem = httpsCallable(functions, 'redeemSyncCode');
         const { data } = await redeem({ code });
         await signInWithCustomToken(auth, data.token);
       } catch (err) {
         console.error('redeemSyncCode failed', err);
-        alert('Nie udało się wczytać kodu: ' + (err.message || err));
+        alert(window.t('ok.codeLoadError', { err: err.message || err }));
       }
     };
 
-    window.startTipCheckout = async (amountGrosze) => {
+    window.startTipCheckout = async (tierIndex) => {
       try {
         const createTip = httpsCallable(functions, 'createTipCheckoutSession');
-        const { data } = await createTip({ amountGrosze });
+        const { data } = await createTip({ tierIndex, lang: window.getCurrentLang() });
         window.location.href = data.url;
       } catch (err) {
         console.error('Tip checkout failed', err);
-        alert('Nie udało się otworzyć płatności: ' + (err.message || err));
+        alert(window.t('ok.tipError', { err: err.message || err }));
       }
     };
 
@@ -1506,19 +1940,19 @@ init();
     window.startProCheckout = async (consentChecked) => {
       if (!currentUid) { window.cloudSignIn(); return; }
       if (!consentChecked) {
-        alert('Zaznacz zgodę, aby kontynuować zakup.');
+        alert(window.t('pro.consentRequired'));
         return;
       }
       const btn = document.getElementById('cfg-pro-buy-btn');
-      if (btn) { btn.disabled = true; btn.textContent = 'Otwieram płatność…'; }
+      if (btn) { btn.disabled = true; btn.textContent = window.t('pro.openingCheckout'); }
       try {
         const createCheckoutSession = httpsCallable(functions, 'createCheckoutSession');
-        const { data } = await createCheckoutSession();
+        const { data } = await createCheckoutSession({ lang: window.getCurrentLang() });
         window.location.href = data.url;
       } catch (err) {
         console.error('Checkout failed', err);
-        alert('Nie udało się otworzyć płatności: ' + (err.message || err));
-        if (btn) { btn.disabled = false; btn.textContent = 'Odblokuj Pro — 50 zł jednorazowo'; }
+        alert(window.t('pro.checkoutError', { err: err.message || err }));
+        if (btn) { btn.disabled = false; btn.textContent = window.t('pro.unlockButton', { price: window.getPricing().proLabel }); }
       }
     };
 
@@ -1527,32 +1961,30 @@ init();
       if (!box) return;
       box.dataset.cloudReady = '1';
       box.innerHTML = user
-        ? `<div class="account-title">Konto</div>
+        ? `<div class="account-title">${window.t('account.title')}</div>
            <div class="account-row">
-             <span class="account-email">✅ ${window.escapeHtml(user.email || user.displayName || 'Zalogowano')}</span>
-             <button class="btn-logout" onclick="cloudSignOut()">Wyloguj</button>
+             <span class="account-email">✅ ${window.escapeHtml(user.email || user.displayName || window.t('account.zalogowano'))}</span>
+             <button class="btn-logout" onclick="cloudSignOut()">${window.t('account.logout')}</button>
            </div>
-           <div class="account-status">${isPro
-              ? '☁️ Pro aktywne — dane synchronizowane z chmurą na każdym urządzeniu.'
-              : '📴 Wersja darmowa — dane zapisane tylko na tym urządzeniu.'}</div>`
-        : `<div class="account-title">Konto</div>
-           <button class="btn-primary" onclick="cloudSignIn()">Zaloguj się przez Google</button>
-           <div class="auth-divider">lub e-mailem</div>
-           <input class="settings-name-input" style="margin-bottom:8px" type="email" id="cfg-email-input" placeholder="E-mail" autocomplete="email">
-           <input class="settings-name-input" style="margin-bottom:8px" type="password" id="cfg-password-input" placeholder="Hasło (min. 6 znaków)" autocomplete="current-password">
+           <div class="account-status">${isPro ? window.t('account.proActive') : window.t('account.freeLocal')}</div>`
+        : `<div class="account-title">${window.t('account.title')}</div>
+           <button class="btn-primary" onclick="cloudSignIn()">${window.t('account.loginGoogle')}</button>
+           <div class="auth-divider">${window.t('account.orEmail')}</div>
+           <input class="settings-name-input" style="margin-bottom:8px" type="email" id="cfg-email-input" placeholder="${window.t('account.emailPlaceholder')}" autocomplete="email">
+           <input class="settings-name-input" style="margin-bottom:8px" type="password" id="cfg-password-input" placeholder="${window.t('account.passwordPlaceholder')}" autocomplete="current-password">
            <div class="auth-email-actions">
-             <button class="btn-primary" onclick="emailSignIn()">Zaloguj</button>
-             <button class="btn-secondary" onclick="emailSignUp()">Zarejestruj</button>
+             <button class="btn-primary" onclick="emailSignIn()">${window.t('account.login')}</button>
+             <button class="btn-secondary" onclick="emailSignUp()">${window.t('account.register')}</button>
            </div>
-           <div class="auth-forgot"><a href="#" onclick="emailForgotPassword();return false;">Nie pamiętasz hasła?</a></div>
-           <div class="auth-divider">lub bez konta</div>
-           <button class="btn-secondary" id="cfg-gencode-btn" onclick="generateSyncCode()">🔑 Wygeneruj kod (bez konta)</button>
+           <div class="auth-forgot"><a href="#" onclick="emailForgotPassword();return false;">${window.t('account.forgotPassword')}</a></div>
+           <div class="auth-divider">${window.t('account.orNoAccount')}</div>
+           <button class="btn-secondary" id="cfg-gencode-btn" onclick="generateSyncCode()">${window.t('account.generateCode')}</button>
            <div id="cfg-synccode-result" style="display:none;margin-top:8px"></div>
            <div class="sync-redeem-row">
-             <input class="settings-name-input" id="cfg-redeemcode-input" placeholder="Mam już kod…">
-             <button class="btn-secondary" onclick="redeemSyncCode()">Wczytaj</button>
+             <input class="settings-name-input" id="cfg-redeemcode-input" placeholder="${window.t('account.haveCodePlaceholder')}">
+             <button class="btn-secondary" onclick="redeemSyncCode()">${window.t('account.loadCode')}</button>
            </div>
-           <div class="account-status">📴 Bez logowania dane są zapisane tylko na tym urządzeniu.</div>`;
+           <div class="account-status">${window.t('account.noLoginLocalOnly')}</div>`;
 
       renderProUI(user);
     }
@@ -1562,36 +1994,40 @@ init();
       if (!box) return;
       if (!user) { box.style.display = 'none'; return; }
       box.style.display = '';
+      const appName = window.t('appName');
+      const price = window.getPricing().proLabel;
+      const legalLangPrefix = window.getCurrentLang() === 'pl' ? '' : '.' + window.getCurrentLang();
 
       if (isPro) {
-        box.innerHTML = `<div class="account-title">⭐ robienierobie Pro</div>
-          <div class="account-status">Dziękujemy za wsparcie! Synchronizacja w chmurze jest aktywna.</div>`;
+        box.innerHTML = `<div class="account-title">${window.t('pro.title', { app: appName })}</div>
+          <div class="account-status">${window.t('pro.active')}</div>`;
         return;
       }
 
-      box.innerHTML = `<div class="account-title">⭐ robienierobie Pro — 50 zł jednorazowo</div>
-        <div class="account-status">Odblokuj synchronizację danych w chmurze między urządzeniami, na zawsze, bez subskrypcji.</div>
+      box.innerHTML = `<div class="account-title">${window.t('pro.unlockTitle', { app: appName, price })}</div>
+        <div class="account-status">${window.t('pro.unlockDesc')}</div>
         <label class="pro-consent">
           <input type="checkbox" id="cfg-pro-consent">
-          Wyrażam zgodę na natychmiastowe udostępnienie treści cyfrowych i przyjmuję do wiadomości utratę prawa
-          odstąpienia od umowy po aktywacji Pro. Zapoznałem/-am się z
-          <a href="terms.html" target="_blank" rel="noopener">regulaminem</a> i
-          <a href="privacy.html" target="_blank" rel="noopener">polityką prywatności</a>.
+          ${window.t('pro.consent')}
+          <a href="terms${legalLangPrefix}.html" target="_blank" rel="noopener">${window.t('pro.terms')}</a> ${window.t('pro.and')}
+          <a href="privacy${legalLangPrefix}.html" target="_blank" rel="noopener">${window.t('pro.privacy')}</a>.
         </label>
         <button class="btn-primary" id="cfg-pro-buy-btn"
           onclick="startProCheckout(document.getElementById('cfg-pro-consent').checked)">
-          Odblokuj Pro — 50 zł jednorazowo
+          ${window.t('pro.unlockButton', { price })}
         </button>`;
     }
+
+    window.refreshAccountUI = () => renderAccountUI(auth.currentUser);
 
     getRedirectResult(auth).catch(err => {
       console.error('Redirect sign-in error', err);
       const box = document.getElementById('cfg-account');
       if (box) {
         box.dataset.cloudReady = '1';
-        box.innerHTML = `<div class="account-title">Konto</div>
-           <button class="btn-primary" onclick="cloudSignIn()">Zaloguj się przez Google</button>
-           <div class="account-status">⚠️ Błąd logowania: ${window.escapeHtml(err.message || String(err))}</div>`;
+        box.innerHTML = `<div class="account-title">${window.t('account.title')}</div>
+           <button class="btn-primary" onclick="cloudSignIn()">${window.t('account.loginGoogle')}</button>
+           <div class="account-status">⚠️ ${window.t('account.loginError')}${window.escapeHtml(err.message || String(err))}</div>`;
       }
     });
 

@@ -1,6 +1,5 @@
 'use strict';
 
-// Deploy marker: 2026-10-03 — bumped to force a real redeploy and rebind secret versions.
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { onRequest } = require('firebase-functions/v2/https');
 const { defineSecret } = require('firebase-functions/params');
@@ -15,43 +14,74 @@ setGlobalOptions({ region: 'europe-west1' });
 const STRIPE_SECRET_KEY = defineSecret('STRIPE_SECRET_KEY');
 const STRIPE_WEBHOOK_SECRET = defineSecret('STRIPE_WEBHOOK_SECRET');
 
-// Single one-time "Pro" unlock — price lives here, not on the client, so it can't be tampered with.
-const PRO_PRICE_PLN_GROSZE = 5000; // 50,00 zł
-// Allowed one-time "tip" amounts — fixed list so the client can never send an arbitrary amount.
-const TIP_AMOUNTS_PLN_GROSZE = [500, 1000, 2000, 5000];
 const SITE_URL = 'https://robienierobie.web.app';
+
+// Per-language pricing/branding — authoritative, never trusted from the client. Amounts are in
+// the smallest currency unit (grosze/cents). Stripe's `locale` accepts 'pl'/'en'/'es' directly.
+const PRICING = {
+  pl: {
+    currency: 'pln', proAmount: 5000, proLabel: '50 zł', tipAmounts: [500, 1000, 2000, 5000],
+    appName: 'robienierobie', statementPro: 'ROBIENIEROBIE PRO', statementTip: 'ROBIENIEROBIE TIP',
+    proName: 'robienierobie Pro — odblokowanie na zawsze',
+    proDesc: 'Synchronizacja w chmurze między urządzeniami dla aplikacji robienierobie',
+    tipName: 'Napiwek dla aplikacji robienierobie ☕',
+    tipDesc: 'Dobrowolne wsparcie rozwoju aplikacji — dziękujemy!',
+  },
+  en: {
+    currency: 'usd', proAmount: 1299, proLabel: '$12.99', tipAmounts: [100, 300, 500, 1000],
+    appName: 'doanddont', statementPro: 'DOANDDONT PRO', statementTip: 'DOANDDONT TIP',
+    proName: 'doanddont Pro — unlock forever',
+    proDesc: 'Cloud sync between devices for the doanddont app',
+    tipName: 'Tip for the doanddont app ☕',
+    tipDesc: 'Voluntary support for app development — thank you!',
+  },
+  es: {
+    currency: 'eur', proAmount: 1199, proLabel: '11,99 €', tipAmounts: [100, 300, 500, 1000],
+    appName: 'robienierobie', statementPro: 'ROBIENIEROBIE PRO', statementTip: 'ROBIENIEROBIE TIP',
+    proName: 'robienierobie Pro — desbloqueo permanente',
+    proDesc: 'Sincronización en la nube entre dispositivos para la app robienierobie',
+    tipName: 'Propina para la app robienierobie ☕',
+    tipDesc: '¡Apoyo voluntario al desarrollo de la app — gracias!',
+  },
+};
+
+function resolveLang(input) {
+  return Object.prototype.hasOwnProperty.call(PRICING, input) ? input : 'en';
+}
 
 exports.createCheckoutSession = onCall(
   { secrets: [STRIPE_SECRET_KEY] },
   async (request) => {
-    // Fix 2026-10-03: Checkout Sessions don't support automatic_payment_methods (removed).
     if (!request.auth) {
-      throw new HttpsError('unauthenticated', 'Musisz być zalogowany, aby odblokować Pro.');
+      throw new HttpsError('unauthenticated', 'You must be signed in to unlock Pro.');
     }
     const uid = request.auth.uid;
+    const lang = resolveLang(request.data && request.data.lang);
+    const pricing = PRICING[lang];
     const stripe = Stripe(STRIPE_SECRET_KEY.value());
 
     // Already Pro? Don't let them pay twice.
     const entitlement = await admin.firestore().doc(`users/${uid}`).get();
     if (entitlement.exists && entitlement.data().pro === true) {
-      throw new HttpsError('failed-precondition', 'To konto ma już odblokowaną wersję Pro.');
+      throw new HttpsError('failed-precondition', 'This account already has Pro unlocked.');
     }
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      locale: lang,
       client_reference_id: uid,
       metadata: { uid },
       payment_intent_data: {
-        statement_descriptor: 'ROBIENIEROBIE PRO',
+        statement_descriptor: pricing.statementPro,
       },
       line_items: [{
         quantity: 1,
         price_data: {
-          currency: 'pln',
-          unit_amount: PRO_PRICE_PLN_GROSZE,
+          currency: pricing.currency,
+          unit_amount: pricing.proAmount,
           product_data: {
-            name: 'robienierobie Pro — odblokowanie na zawsze',
-            description: 'Synchronizacja w chmurze między urządzeniami dla aplikacji robienierobie',
+            name: pricing.proName,
+            description: pricing.proDesc,
           },
         },
       }],
@@ -63,30 +93,34 @@ exports.createCheckoutSession = onCall(
   }
 );
 
-// "Postaw kawę" — no login required, fixed set of amounts so the client can't tamper with price.
+// "Buy us a coffee" — no login required. Client sends a tier index (0-3), never a raw amount.
 exports.createTipCheckoutSession = onCall(
   { secrets: [STRIPE_SECRET_KEY] },
   async (request) => {
-    const amount = Number(request.data && request.data.amountGrosze);
-    if (!TIP_AMOUNTS_PLN_GROSZE.includes(amount)) {
-      throw new HttpsError('invalid-argument', 'Nieprawidłowa kwota napiwku.');
+    const lang = resolveLang(request.data && request.data.lang);
+    const pricing = PRICING[lang];
+    const tierIndex = Number(request.data && request.data.tierIndex);
+    if (!Number.isInteger(tierIndex) || tierIndex < 0 || tierIndex >= pricing.tipAmounts.length) {
+      throw new HttpsError('invalid-argument', 'Invalid tip amount.');
     }
+    const amount = pricing.tipAmounts[tierIndex];
     const stripe = Stripe(STRIPE_SECRET_KEY.value());
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      locale: lang,
       metadata: { type: 'tip' },
       payment_intent_data: {
-        statement_descriptor: 'ROBIENIEROBIE TIP',
+        statement_descriptor: pricing.statementTip,
       },
       line_items: [{
         quantity: 1,
         price_data: {
-          currency: 'pln',
+          currency: pricing.currency,
           unit_amount: amount,
           product_data: {
-            name: 'Napiwek dla aplikacji robienierobie ☕',
-            description: 'Dobrowolne wsparcie rozwoju aplikacji — dziękujemy!',
+            name: pricing.tipName,
+            description: pricing.tipDesc,
           },
         },
       }],

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'robienierobie-v13';
+const CACHE_NAME = 'robienierobie-v14';
 const ASSETS = [
   '/',
   '/index.html',
@@ -6,7 +6,11 @@ const ASSETS = [
   '/icon.svg',
   '/icon-maskable.svg',
   '/terms.html',
-  '/privacy.html'
+  '/privacy.html',
+  '/terms.en.html',
+  '/privacy.en.html',
+  '/terms.es.html',
+  '/privacy.es.html'
 ];
 
 self.addEventListener('install', event => {

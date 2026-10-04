@@ -42,7 +42,7 @@ exports.createCheckoutSession = onCall(
       client_reference_id: uid,
       metadata: { uid },
       payment_intent_data: {
-        statement_descriptor: 'NAWYKI PRO',
+        statement_descriptor: 'ROBIENIEROBIE PRO',
       },
       line_items: [{
         quantity: 1,
@@ -50,8 +50,8 @@ exports.createCheckoutSession = onCall(
           currency: 'pln',
           unit_amount: PRO_PRICE_PLN_GROSZE,
           product_data: {
-            name: 'Nawyki Pro — odblokowanie na zawsze',
-            description: 'Synchronizacja w chmurze między urządzeniami dla aplikacji Nawyki',
+            name: 'robienierobie Pro — odblokowanie na zawsze',
+            description: 'Synchronizacja w chmurze między urządzeniami dla aplikacji robienierobie',
           },
         },
       }],
@@ -77,7 +77,7 @@ exports.createTipCheckoutSession = onCall(
       mode: 'payment',
       metadata: { type: 'tip' },
       payment_intent_data: {
-        statement_descriptor: 'NAWYKI WSPARCIE',
+        statement_descriptor: 'ROBIENIEROBIE TIP',
       },
       line_items: [{
         quantity: 1,
@@ -85,7 +85,7 @@ exports.createTipCheckoutSession = onCall(
           currency: 'pln',
           unit_amount: amount,
           product_data: {
-            name: 'Napiwek dla aplikacji Nawyki ☕',
+            name: 'Napiwek dla aplikacji robienierobie ☕',
             description: 'Dobrowolne wsparcie rozwoju aplikacji — dziękujemy!',
           },
         },

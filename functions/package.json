@@ -1,6 +1,6 @@
 {
   "name": "functions",
-  "description": "Cloud Functions for the Nawyki app — Stripe Pro unlock",
+  "description": "Cloud Functions for the robienierobie app — Stripe Pro unlock",
   "engines": { "node": "22" },
   "main": "index.js",
   "scripts": {

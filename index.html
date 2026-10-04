@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Nawyki</title>
+  <title>robienierobie</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#7c4dff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Nawyki">
+  <meta name="apple-mobile-web-app-title" content="robienierobie">
   <link rel="apple-touch-icon" href="icon.svg">
 
   <style>
@@ -434,7 +434,7 @@
   <div class="page active" id="page-home">
 
     <div class="page-header">
-      <h2>Nawyki</h2>
+      <h2>robienierobie</h2>
       <div class="sub" id="h-date"></div>
     </div>
 
@@ -1216,12 +1216,12 @@ function applyCustomEmoji() {
 
 // ════════════════════════════════════════════════════ BACKUP (EXPORT/IMPORT) ══
 function exportData() {
-  const payload = { app: 'niefajki', exportedAt: new Date().toISOString(), ...S };
+  const payload = { app: 'robienierobie', exportedAt: new Date().toISOString(), ...S };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `niefajki-backup-${todayStr()}.json`;
+  a.download = `robienierobie-backup-${todayStr()}.json`;
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -1564,12 +1564,12 @@ init();
       box.style.display = '';
 
       if (isPro) {
-        box.innerHTML = `<div class="account-title">⭐ Nawyki Pro</div>
+        box.innerHTML = `<div class="account-title">⭐ robienierobie Pro</div>
           <div class="account-status">Dziękujemy za wsparcie! Synchronizacja w chmurze jest aktywna.</div>`;
         return;
       }
 
-      box.innerHTML = `<div class="account-title">⭐ Nawyki Pro — 50 zł jednorazowo</div>
+      box.innerHTML = `<div class="account-title">⭐ robienierobie Pro — 50 zł jednorazowo</div>
         <div class="account-status">Odblokuj synchronizację danych w chmurze między urządzeniami, na zawsze, bez subskrypcji.</div>
         <label class="pro-consent">
           <input type="checkbox" id="cfg-pro-consent">

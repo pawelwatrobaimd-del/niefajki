@@ -18,6 +18,7 @@
       ".git/**",
       ".gitignore",
       "**/.*",
+      "!.well-known/**",
       "**/node_modules/**"
     ],
     "headers": [

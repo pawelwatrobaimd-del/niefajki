@@ -1,10 +1,15 @@
-const CACHE_NAME = 'robienierobie-v14';
+const CACHE_NAME = 'robienierobie-v18';
 const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/icon.svg',
   '/icon-maskable.svg',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-maskable-192.png',
+  '/icon-maskable-512.png',
+  '/icon-180.png',
   '/terms.html',
   '/privacy.html',
   '/terms.en.html',

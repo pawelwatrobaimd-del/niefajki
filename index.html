@@ -5,12 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>robienierobie</title>
 
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('theme_v1');
+        var theme = saved === 'light' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#7c4dff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="robienierobie">
-  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon-180.png">
 
   <style>
     :root {
@@ -27,6 +37,34 @@
       --orange:    #ffab40;
       --text:      #e8e8f0;
       --muted:     #6e6e8a;
+      --grid-line:  rgba(255,255,255,0.1);
+      --grid-label: rgba(255,255,255,0.3);
+      --zero-bar:   rgba(255,255,255,0.06);
+      --shadow:     rgba(0,0,0,.5);
+      --nav-bg:     rgba(13,13,26,.92);
+      color-scheme: dark;
+    }
+
+    :root[data-theme="light"] {
+      --bg:        #f2f2f7;
+      --card:      #ffffff;
+      --card2:     #ececf5;
+      --border:    rgba(0,0,0,0.08);
+      --primary:   #7c4dff;
+      --pri-light: #6a35e0;
+      --cyan:      #0097a7;
+      --green:     #2e7d32;
+      --yellow:    #b8860b;
+      --red:       #d32f2f;
+      --orange:    #e65100;
+      --text:      #1a1a2e;
+      --muted:     #6b6b80;
+      --grid-line:  rgba(0,0,0,0.08);
+      --grid-label: rgba(0,0,0,0.35);
+      --zero-bar:   rgba(0,0,0,0.06);
+      --shadow:     rgba(0,0,0,.18);
+      --nav-bg:     rgba(255,255,255,.85);
+      color-scheme: light;
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,6 +78,7 @@
       min-height: 100%;
       overflow-x: hidden;
       padding-bottom: calc(72px + env(safe-area-inset-bottom));
+      transition: background .15s ease, color .15s ease;
     }
 
     /* ── PAGES ────────────────────────────────────────────────────────────── */
@@ -311,7 +350,7 @@
     /* ── BOTTOM NAV ──────────────────────────────────────────────────────── */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(13,13,26,.92);
+      background: var(--nav-bg);
       backdrop-filter: blur(24px) saturate(180%);
       -webkit-backdrop-filter: blur(24px) saturate(180%);
       border-top: 1px solid var(--border);
@@ -340,7 +379,7 @@
       background: var(--card2); border: 1px solid rgba(124,77,255,.4);
       border-radius: 14px; padding: 14px 16px;
       z-index: 300; font-size: .85rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,.5);
+      box-shadow: 0 8px 32px var(--shadow);
     }
     #install-hint .close-hint {
       float: right; background: none; border: none;
@@ -369,7 +408,7 @@
       background: var(--card); border: 1px solid var(--border);
       border-radius: 24px 24px 0 0; padding: 18px 16px;
       display: flex; flex-direction: column;
-      box-shadow: 0 -8px 40px rgba(0,0,0,.5);
+      box-shadow: 0 -8px 40px var(--shadow);
     }
     .emoji-modal-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -511,6 +550,14 @@
           <option value="pl">Polski</option>
           <option value="en">English</option>
           <option value="es">Español</option>
+        </select>
+      </div>
+
+      <div class="card" style="margin-bottom:12px">
+        <div class="account-title" data-i18n="settings.theme">🎨 Wygląd</div>
+        <select id="cfg-theme-select" class="settings-name-input" onchange="setTheme(this.value)">
+          <option value="light" data-i18n="theme.light">Jasny</option>
+          <option value="dark" data-i18n="theme.dark">Ciemny</option>
         </select>
       </div>
 
@@ -664,6 +711,9 @@ const I18N = {
     'settings.account': 'Konto',
     'settings.cloudNotConfigured': '📴 Synchronizacja z chmurą nieskonfigurowana — dane są zapisane tylko na tym urządzeniu.',
     'settings.language': '🌐 Język',
+    'settings.theme': '🎨 Wygląd',
+    'theme.light': 'Jasny',
+    'theme.dark': 'Ciemny',
     'settings.tipTitle': '☕ Postaw nam kawę',
     'settings.tipDesc': 'Podoba Ci się appka? Możesz dobrowolnie wesprzeć jej rozwój — bez zakładania konta.',
     'settings.addTile': '+ Dodaj kafelek',
@@ -763,6 +813,9 @@ const I18N = {
     'settings.account': 'Account',
     'settings.cloudNotConfigured': '📴 Cloud sync not configured — data is saved only on this device.',
     'settings.language': '🌐 Language',
+    'settings.theme': '🎨 Appearance',
+    'theme.light': 'Light',
+    'theme.dark': 'Dark',
     'settings.tipTitle': '☕ Buy us a coffee',
     'settings.tipDesc': 'Enjoying the app? You can voluntarily support its development — no account needed.',
     'settings.addTile': '+ Add tile',
@@ -862,6 +915,9 @@ const I18N = {
     'settings.account': 'Cuenta',
     'settings.cloudNotConfigured': '📴 Sincronización en la nube no configurada — los datos se guardan solo en este dispositivo.',
     'settings.language': '🌐 Idioma',
+    'settings.theme': '🎨 Apariencia',
+    'theme.light': 'Claro',
+    'theme.dark': 'Oscuro',
     'settings.tipTitle': '☕ Invítanos a un café',
     'settings.tipDesc': '¿Te gusta la app? Puedes apoyar voluntariamente su desarrollo — sin crear una cuenta.',
     'settings.addTile': '+ Añadir hábito',
@@ -984,6 +1040,32 @@ function setLanguage(lang) {
 window.t = tr;
 window.getCurrentLang = () => currentLang;
 
+// ════════════════════════════════════════════════════ THEME ═══════════════════
+const THEME_KEY = 'theme_v1';
+const THEME_COLORS = { dark: '#0a0a14', light: '#f2f2f7' };
+
+function detectTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  return saved === 'light' ? 'light' : 'dark';
+}
+
+let currentTheme = detectTheme();
+
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) metaTheme.setAttribute('content', THEME_COLORS[currentTheme]);
+}
+
+function setTheme(theme) {
+  if (!THEME_COLORS[theme]) return;
+  currentTheme = theme;
+  localStorage.setItem(THEME_KEY, theme);
+  applyTheme();
+  if ($('page-stats').classList.contains('active')) renderStats();
+}
+applyTheme();
+
 
 const DEFAULT_TILES_BY_LANG = {
   pl: [
@@ -1014,7 +1096,8 @@ let S = {
   tiles: getDefaultTiles().map(t => ({ ...t })),
   log: {},          // { '2026-09-09': { papierosy: 2, trening: 1 } }
   mottos: [],        // string[]
-  summaryImages: {}  // { negative, zero, positive } -> data URL
+  summaryImages: {}, // { negative, zero, positive } -> data URL
+  updatedAt: 0       // ms epoch of last local change; 0 = never changed, lets a fresh device always accept the cloud copy
 };
 
 // ════════════════════════════════════════════════════ HELPERS ═════════════════
@@ -1031,6 +1114,7 @@ function escapeHtml(str) {
 }
 
 function persist() {
+  S.updatedAt = Date.now();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
   if (typeof window.cloudSave === 'function') window.cloudSave(S);
 }
@@ -1040,13 +1124,21 @@ function getLocalState() {
   return S;
 }
 
-// Bridge for the Firebase module script: overwrite local state with the cloud copy (cloud wins).
+// Bridge for the Firebase module script: overwrite local state with the cloud copy, UNLESS this
+// device has local taps newer than the cloud copy (e.g. a debounced cloud save never landed
+// because the PWA got backgrounded/killed) — in that case push local up instead of wiping it out.
 function applyCloudState(remote) {
   if (!remote) return;
+  const remoteUpdatedAt = typeof remote.updatedAt === 'number' ? remote.updatedAt : 0;
+  if (remoteUpdatedAt < S.updatedAt) {
+    if (typeof window.cloudSave === 'function') window.cloudSave(S, true);
+    return;
+  }
   if (Array.isArray(remote.tiles) && remote.tiles.length) S.tiles = remote.tiles;
   if (remote.log && typeof remote.log === 'object') S.log = remote.log;
   if (Array.isArray(remote.mottos)) S.mottos = remote.mottos;
   if (remote.summaryImages && typeof remote.summaryImages === 'object') S.summaryImages = remote.summaryImages;
+  S.updatedAt = remoteUpdatedAt;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
   renderHome();
   renderSettings();
@@ -1063,6 +1155,7 @@ function loadState() {
       S.log   = parsed.log && typeof parsed.log === 'object' ? parsed.log : {};
       S.mottos = Array.isArray(parsed.mottos) ? parsed.mottos : [];
       S.summaryImages = parsed.summaryImages && typeof parsed.summaryImages === 'object' ? parsed.summaryImages : {};
+      S.updatedAt = typeof parsed.updatedAt === 'number' ? parsed.updatedAt : 0;
       return;
     } catch (err) { /* fall through to defaults below */ }
   }
@@ -1300,7 +1393,12 @@ function drawStatsChart(dates, scores) {
   const mid    = H / 2;
   const scale  = (H / 2 - 16) / maxAbs;
 
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  const rootStyle = getComputedStyle(document.documentElement);
+  const gridLine  = rootStyle.getPropertyValue('--grid-line').trim();
+  const gridLabel = rootStyle.getPropertyValue('--grid-label').trim();
+  const zeroBar   = rootStyle.getPropertyValue('--zero-bar').trim();
+
+  ctx.strokeStyle = gridLine;
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(0, mid); ctx.lineTo(totalW, mid); ctx.stroke();
 
@@ -1311,7 +1409,7 @@ function drawStatsChart(dates, scores) {
     const score = scores[i];
     const h     = Math.abs(score) * scale;
 
-    ctx.fillStyle = score > 0 ? 'rgba(105,240,174,0.85)' : score < 0 ? 'rgba(255,82,82,0.85)' : 'rgba(255,255,255,0.06)';
+    ctx.fillStyle = score > 0 ? 'rgba(105,240,174,0.85)' : score < 0 ? 'rgba(255,82,82,0.85)' : zeroBar;
     if (score >= 0) {
       roundRect(ctx, x, mid - Math.max(h, 2), BW, Math.max(h, 2), [4, 4, 0, 0]);
     } else {
@@ -1321,7 +1419,7 @@ function drawStatsChart(dates, scores) {
 
     if (i % labelStep === 0 || i === dates.length - 1) {
       const d = new Date(ds);
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.fillStyle = gridLabel;
       ctx.font = '10px system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`${d.getDate()}/${d.getMonth() + 1}`, x + BW / 2, H - 4);
@@ -1373,6 +1471,9 @@ function renderSettings() {
 
   const langSelect = $('cfg-lang-select');
   if (langSelect) langSelect.value = currentLang;
+
+  const themeSelect = $('cfg-theme-select');
+  if (themeSelect) themeSelect.value = currentTheme;
 
   renderTipAmounts();
 
@@ -1928,14 +2029,26 @@ init();
     };
 
     // Cloud sync (the actual habit data) is a Pro-only perk — free accounts stay local-only.
-    window.cloudSave = (state) => {
+    // `immediate` skips the debounce — used when resolving a stale-cloud conflict and when the
+    // app is about to be backgrounded/killed, so a pending tap isn't lost before it can sync.
+    window.cloudSave = (state, immediate) => {
       if (!currentUid || !isPro) return;
       clearTimeout(saveTimer);
-      saveTimer = setTimeout(() => {
+      const doSave = () => {
         setDoc(doc(db, 'users', currentUid, 'data', 'state'), state)
           .catch(err => console.error('Cloud save failed', err));
-      }, 600);
+      };
+      if (immediate) { doSave(); return; }
+      saveTimer = setTimeout(doSave, 600);
     };
+
+    // Mobile PWAs can suspend/kill the page almost immediately after it's hidden, before the
+    // debounced cloudSave above gets a chance to fire — flush any pending save right away.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && typeof window.getLocalState === 'function') {
+        window.cloudSave(window.getLocalState(), true);
+      }
+    });
 
     window.startProCheckout = async (consentChecked) => {
       if (!currentUid) { window.cloudSignIn(); return; }
@@ -2071,7 +2184,9 @@ init();
       if (stateSnap.exists()) {
         window.applyCloudState(stateSnap.data());
       } else if (typeof window.getLocalState === 'function') {
-        await setDoc(stateRef, window.getLocalState());
+        const localState = window.getLocalState();
+        localState.updatedAt = Date.now();
+        await setDoc(stateRef, localState);
       }
     });
   }

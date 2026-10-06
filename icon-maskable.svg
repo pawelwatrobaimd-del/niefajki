@@ -14,11 +14,9 @@
   <rect width="512" height="512" fill="url(#bgGrad)"/>
 
   <!-- Content within safe zone (80% = 40px padding each side, 432x432 area) -->
-  <circle cx="256" cy="230" r="105" fill="none" stroke="url(#accentGrad)" stroke-width="22" stroke-linecap="round"/>
-  <line x1="181" y1="155" x2="331" y2="305" stroke="url(#accentGrad)" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="256" cy="256" r="105" fill="none" stroke="url(#accentGrad)" stroke-width="22" stroke-linecap="round"/>
+  <line x1="181" y1="181" x2="331" y2="331" stroke="url(#accentGrad)" stroke-width="22" stroke-linecap="round"/>
 
-  <rect x="164" y="213" width="140" height="26" rx="6" fill="rgba(230,230,230,0.8)"/>
-  <rect x="304" y="213" width="44" height="26" rx="6" fill="rgba(205,160,100,0.8)"/>
-
-  <text x="256" y="395" text-anchor="middle" font-family="system-ui, sans-serif" font-size="30" font-weight="800" fill="url(#accentGrad)">BEZ PAPIEROSA</text>
+  <rect x="164" y="239" width="140" height="26" rx="6" fill="rgba(230,230,230,0.8)"/>
+  <rect x="304" y="239" width="44" height="26" rx="6" fill="rgba(205,160,100,0.8)"/>
 </svg>
